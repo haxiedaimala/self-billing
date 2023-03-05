@@ -1,21 +1,18 @@
 <script setup lang="ts">
 import Layout from '@/components/Layout.vue';
+import {reactive} from 'vue';
+
+const routeInfos = reactive([
+  {name: 'details', text: '明细'},
+  {name: 'billing', text: '账单'},
+  {name: 'money', text: '记账'},
+  {name: 'category', text: '类别'},
+]);
 </script>
 
 <template>
-  <Layout>
-    <template #content>
-      Billing vue
-    </template>
-    <template #nav>
-      <router-link :to="{name:'details'}">明细</router-link>
-      |
-      <router-link :to="{name:'billing'}">账单</router-link>
-      |
-      <router-link :to="{name:'money'}">记账</router-link>
-      |
-      <router-link :to="{name:'category'}">类别</router-link>
-    </template>
+  <Layout :routes="routeInfos">
+    Billing vue
   </Layout>
 </template>
 

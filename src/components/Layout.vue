@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import Nav from '@/components/Nav.vue';
+
+defineProps<{
+  routes: { name: string, text: string }[]
+}>();
 </script>
 
 <template>
   <div class="layout-wrapper">
     <div class="content">
-      <slot name="content"/>
+      <slot/>
     </div>
-    <nav class="nav">
-      <slot name="nav"/>
-    </nav>
+    <Nav :routes="routes"/>
   </div>
 </template>
 
@@ -16,16 +19,11 @@
 .layout-wrapper {
   display: flex;
   flex-direction: column;
-  border: 2px solid red;
   height: 100vh;
 
   .content {
     flex: 1;
     overflow: auto;
-  }
-
-  .nav {
-    border: 1px solid blue;
   }
 }
 </style>
