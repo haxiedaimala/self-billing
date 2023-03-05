@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <div class="nav">
     <template v-for="route in routes" :key="route.name">
-      <router-link :to="{name:`${route.name}`}" class="item">
+      <router-link :to="{name:`${route.name}`}" class="item" active-class="selected">
         <Icon :name="route.iconName"/>
         {{ route.text }}
       </router-link>
@@ -30,6 +30,10 @@ defineProps<{
     align-items: center;
     flex-direction: column;
     padding: .25em 0;
+
+    &.selected {
+      color: var(--color-selected);
+    }
 
     > .icon {
       width: 1.5em;

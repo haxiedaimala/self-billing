@@ -3,6 +3,11 @@
 </template>
 
 <style lang="scss">
+:root {
+  --color: #ffce57;
+  --color-selected: #d9576f;
+}
+
 * {
   margin: 0;
   padding: 0;
