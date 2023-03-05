@@ -6,6 +6,8 @@ const Category = import(/* webpackChunkName: "label" */ '@/views/Category.vue');
 const Details = import(/* webpackChunkName: "details" */ '@/views/Details.vue');
 const NotFound = import(/* webpackChunkName: "notFound" */ '@/views/NotFound.vue');
 const Statistics = import(/* webpackChunkName: "statistics" */ '@/views/Statistics.vue');
+const Information = import(/* webpackChunkName: "information" */ '@/views/Information.vue');
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -22,19 +24,27 @@ const routes: Array<RouteRecordRaw> = [
     component: Money
   },
   {
+    path: '/information',
+    name: 'information',
+    component: Information,
+    redirect: {name: 'details'},
+    children: [
+      {
+        path: '/details',
+        name: 'details',
+        component: Details
+      },
+      {
+        path: '/statistics',
+        name: 'statistics',
+        component: Statistics
+      }
+    ]
+  },
+  {
     path: '/category',
     name: 'category',
     component: Category
-  },
-  {
-    path: '/details',
-    name: 'details',
-    component: Details
-  },
-  {
-    path: '/statistics',
-    name: 'statistics',
-    component: Statistics
   },
   {
     path: '/:pathMatch(.*)*',

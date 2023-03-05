@@ -3,16 +3,14 @@ import Layout from '@/components/Layout.vue';
 import {reactive} from 'vue';
 
 const routeInfos = reactive([
-  {name: 'information', text: '明细'},
-  {name: 'billing', text: '账单'},
-  {name: 'money', text: '记账'},
-  {name: 'category', text: '类别'},
+  {name: 'details', text: '明细'},
+  {name: 'statistics', text: '统计'}
 ]);
 </script>
 
 <template>
   <Layout :routes="routeInfos">
-    Billing vue
+    <router-view/>
   </Layout>
 </template>
 
