@@ -27,5 +27,8 @@ module.exports = {
         jest: true
       }
     }
-  ]
+  ],
+  'globals': {
+    '__WebpackModuleApi': 'writable'
+  }
 }

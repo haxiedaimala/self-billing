@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import a from '@/assets/icons/billing.svg';
-import b from '@/assets/icons/category.svg';
-import c from '@/assets/icons/details.svg';
-import d from '@/assets/icons/money.svg';
-
-console.log(a, b, c, d);
+let importAll = (requireContent: __WebpackModuleApi.RequireContext) => requireContent.keys().forEach(requireContent);
+try {
+  importAll(require.context('../assets/icons', true, /\.svg$/));
+} catch (error) {
+  console.log(error);
+}
 defineProps<{
   routes: { name: string, text: string, iconName: string }[]
 }>();
