@@ -3,32 +3,21 @@
 </template>
 
 <style lang="scss">
+@import "~@/assets/styles/helper.scss";
+@import "~@/assets/styles/reset.scss";
+
 :root {
   --color: #ffce57;
   --color-selected: #d9576f;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
+#app {
   font-size: 16px;
   line-height: 1.5;
+  font-family: $font-hei;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #333;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-//#app {
-//  font-family: Avenir, Helvetica, Arial, sans-serif;
-//  -webkit-font-smoothing: antialiased;
-//  -moz-osx-font-smoothing: grayscale;
-//  text-align: center;
-//  color: #2c3e50;
-//}
 </style>
