@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Icon from '@/components/Icon.vue'
 </script>
 
 <template>
@@ -8,10 +9,26 @@
   </ul>
   <div class="tags">
     <ul class="current">
-      <li>衣</li>
-      <li>食</li>
-      <li>住</li>
-      <li>行</li>
+      <li>
+        <Icon name="food"/>
+        <span>餐饮</span>
+      </li>
+      <li>
+        <Icon name="shopping"/>
+        <span>购物</span>
+      </li>
+      <li>
+        <Icon name="car"/>
+        <span>交通</span>
+      </li>
+      <li>
+        <Icon name="cloth"/>
+        <span>服饰</span>
+      </li>
+      <li>
+        <Icon name="phone"/>
+        <span>通讯</span>
+      </li>
     </ul>
     <div class="new">
       <button>新增标签</button>
@@ -60,8 +77,10 @@
     padding: 0.5em 0;
     position: relative;
     color: #878785;
+
     &.selected {
       color: #1f2324;
+
       &::after {
         content: '';
         position: absolute;

@@ -7,12 +7,17 @@ module.exports = defineConfig({
 
   chainWebpack: config => {
     const dir = path.resolve(__dirname, 'src/assets/icons')
-
+    const dir2 = path.resolve(__dirname, 'src/assets/icons/original')
     config.module
       .rule('svg-sprite')
       .test(/\.svg$/)
       .include.add(dir).end() //包含 icons 目录
       .use('svg-sprite-loader').loader('svg-sprite-loader').options({extract: false}).end()
+
+    config.module
+      .rule('svgo')
+      .test(/\.svg$/)
+      .exclude.add(dir2).end()
       .use('svgo-loader').loader('svgo-loader')
       .tap(options => ({
         ...options, plugins: [{name: 'removeAttrs', params: {attrs: '(fill|stroke)'}}]
