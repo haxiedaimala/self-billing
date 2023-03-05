@@ -2,7 +2,7 @@
 import Nav from '@/components/Nav.vue';
 
 defineProps<{
-  routes: { name: string, text: string }[]
+  routes: { name: string, text: string, iconName: string }[]
 }>();
 </script>
 

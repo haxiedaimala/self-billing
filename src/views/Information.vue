@@ -3,8 +3,8 @@ import Layout from '@/components/Layout.vue';
 import {reactive} from 'vue';
 
 const routeInfos = reactive([
-  {name: 'details', text: '明细'},
-  {name: 'statistics', text: '统计'}
+  {name: 'details', text: '明细', iconName: 'details'},
+  {name: 'statistics', text: '统计', iconName: 'details'}
 ]);
 </script>
 
