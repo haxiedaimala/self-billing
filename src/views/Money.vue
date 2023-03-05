@@ -2,6 +2,10 @@
 </script>
 
 <template>
+  <ul class="types">
+    <li class="selected">支出</li>
+    <li>收入</li>
+  </ul>
   <div class="tags">
     <ul class="current">
       <li>衣</li>
@@ -13,31 +17,29 @@
       <button>新增标签</button>
     </div>
   </div>
-  <label class="notes">
-    <span class="name">备注</span>
-    <input type="text">
-  </label>
-  <ul class="types">
-    <li class="selected">支出</li>
-    <li>收入</li>
-  </ul>
-  <div class="numberPad">
-    <div class="output">100</div>
-    <div>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>删除</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>清空</button>
+
+  <div class="panel">
+    <div class="panel-info">
+      <input class="notes" type="text" placeholder="点击输入备注">
+      <div class="output">￥0.00</div>
+    </div>
+    <div class="numberPad">
       <button>7</button>
       <button>8</button>
       <button>9</button>
-      <button>OK</button>
-      <button>0</button>
+      <button>03.15</button>
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button>+</button>
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>-</button>
       <button>.</button>
+      <button>0</button>
+      <button>删除</button>
+      <button>完成</button>
     </div>
   </div>
 </template>
