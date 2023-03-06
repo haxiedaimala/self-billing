@@ -2,24 +2,29 @@
 import Types from '@/components/Types.vue';
 import CategoryItem from '@/components/CategoryItem.vue';
 import NumberPanel from '@/components/NumberPanel.vue';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 
 //支付类型
 const type = ref('-');
 //标签类别
-const dateSource = ref([
-  {category: '餐饮', iconName: 'food'},
-  {category: '购物', iconName: 'shopping'},
-  {category: '交通', iconName: 'car'},
-  {category: '服饰', iconName: 'cloth'},
-  {category: '通讯', iconName: 'phone'}
+const CategoryList = ref([
+  {category: '餐饮', iconName: 'food', isShow: true},
+  {category: '购物', iconName: 'shopping', isShow: true},
+  {category: '交通', iconName: 'car', isShow: true},
+  {category: '服饰', iconName: 'cloth', isShow: true},
+  {category: '通讯', iconName: 'phone', isShow: true},
+  {category: '交通', iconName: 'car', isShow: true},
+  {category: '服饰', iconName: 'cloth', isShow: true},
+  {category: '通讯', iconName: 'phone', isShow: true}
 ]);
-const selectCategory = ref({category: '餐饮', iconName: 'food'});
+const dateSource = computed<Category[]>(() => {
+  return CategoryList.value.filter(item => item.isShow);
+});
+const selectCategory = ref<Category>({category: '餐饮', iconName: 'food', isShow: true});
 </script>
 
 <template>
   <div class="wrapper">
-    {{ selectCategory }}
     <Types v-model="type"/>
     <CategoryItem v-model="dateSource" v-model:selected="selectCategory"/>
     <NumberPanel/>

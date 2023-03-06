@@ -1,4 +1,5 @@
 interface Category {
   category: string,
-  iconName: string
+  iconName: string,
+  isShow: boolean
 }
