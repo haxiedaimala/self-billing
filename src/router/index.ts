@@ -7,7 +7,7 @@ const Details = import(/* webpackChunkName: "details" */ '@/views/Details.vue');
 const NotFound = import(/* webpackChunkName: "notFound" */ '@/views/NotFound.vue');
 const Statistics = import(/* webpackChunkName: "statistics" */ '@/views/Statistics.vue');
 const Information = import(/* webpackChunkName: "information" */ '@/views/Information.vue');
-
+const SetCategory = import(/* webpackChunkName: "setCategory" */ '@/views/SetCategory.vue');
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -45,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/category',
     name: 'category',
     component: Category
+  },
+  {
+    path: '/setCategory',
+    name: 'setCategory',
+    component: SetCategory
   },
   {
     path: '/:pathMatch(.*)*',

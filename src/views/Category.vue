@@ -64,11 +64,13 @@ const goBack = () => router.back();
 </template>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/helper.scss";
+
 .nav {
   display: flex;
   font-size: 18px;
   align-items: center;
-  padding: 0.8em 2em;
+  padding: 1.5em 2em 0.8em;
 
   .left {
     width: 1.5em;
@@ -152,18 +154,11 @@ const goBack = () => router.back();
   }
 
   &.item-first {
-    margin-top: 100px;
+    margin-top: 90px;
   }
 }
 
 .setCategory {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  font-size: 20px;
-  padding: 0.8em 0;
-  text-align: center;
-  background-color: var(--color-bg);
+  @extend %setCategory;
 }
 </style>
