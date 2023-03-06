@@ -1,26 +1,13 @@
 <script setup lang="ts">
-import {useRouter} from 'vue-router';
 import Icon from '@/components/Icon.vue';
+import TopNav from '@/components/TopNav.vue';
 import {ref} from 'vue';
 
 const type = ref('-');
-const router = useRouter();
-const goBack = () => router.back();
-const toggle = (value: string) => type.value = value;
 </script>
 
 <template>
-  <Teleport to="body">
-    <div class="nav top">
-      <Icon name="left" class="left" @click="goBack"/>
-      <span class="title">设置自定义分类</span>
-      <div class="type">
-        <span :class="{selected:type==='-'}" @click="toggle('-')">支出</span>
-        <span>/</span>
-        <span :class="{selected:type==='+'}" @click="toggle('+')">收入</span>
-      </div>
-    </div>
-  </Teleport>
+  <TopNav v-model="type">设置自定义分类</TopNav>
   <div class="content">
     <span>新建分类名称</span>
     <div class="edit">
@@ -254,43 +241,9 @@ const toggle = (value: string) => type.value = value;
   align-items: center;
   padding: 0.8em 2em;
 
-  .left {
-    width: 1.5em;
-    height: 1.5em;
-    margin-left: -1.5em;
-    margin-right: 0.3em;
-  }
-
   .title {
     font-weight: bold;
     font-size: 20px;
-  }
-
-  .type {
-    color: #878785;
-    margin-left: auto;
-
-    span:not(:first-child) {
-      margin-left: 5px;
-    }
-
-    .selected {
-      font-weight: bold;
-      color: #333;
-    }
-  }
-
-  &.top {
-    background-color: #fff;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    padding-top: 2em;
-
-    .title {
-      font-size: 24px;
-    }
   }
 }
 
