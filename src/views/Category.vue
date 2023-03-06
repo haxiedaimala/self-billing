@@ -58,9 +58,9 @@ const goBack = () => router.back();
     </ul>
   </template>
 
-  <div class="setCategory">
+  <router-link :to="{name:'setCategory'}" class="setCategory">
     <span>+ 自定义分类</span>
-  </div>
+  </router-link>
 </template>
 
 <style lang="scss" scoped>
