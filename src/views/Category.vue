@@ -2,7 +2,7 @@
 import Icon from '@/components/Icon.vue';
 import {computed, inject, ref, Ref} from 'vue';
 
-const type = ref('+');
+const type = ref('-');
 const categoryList = inject<Ref<Category[]>>('categoryList')!;
 const isShowCategory = computed(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
@@ -11,6 +11,9 @@ const unShowCategory = computed(() => {
   return categoryList.value.filter(item => !item.isShow && item.type === type.value);
 });
 const toggle = (value: string) => type.value = value;
+const toggleIsShow = (value: Category) => {
+  value.isShow = !value.isShow;
+};
 </script>
 
 <template>
@@ -27,7 +30,7 @@ const toggle = (value: string) => type.value = value;
 
   <ul class="item item-first">
     <li v-for="item in isShowCategory" :key="item.category">
-      <span class="category">
+      <span class="category" @click="toggleIsShow(item)">
         <Icon :name="item.iconName"/>
         <Icon name="delete" class="delete"/>
       </span>
@@ -35,12 +38,13 @@ const toggle = (value: string) => type.value = value;
       <Icon name="menu" class="menu"/>
     </li>
   </ul>
+
   <template v-if="unShowCategory.length>0">
     <div class="nav">
       <span class="title">更多类别</span>
     </div>
     <ul class="item">
-      <li v-for="item in unShowCategory" :key="item.category">
+      <li v-for="item in unShowCategory" :key="item.category" @click="toggleIsShow(item)">
       <span class="category">
         <Icon :name="item.iconName"/>
         <Icon name="add" class="add"/>
