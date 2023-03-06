@@ -7,10 +7,10 @@ const categoryList = ref<Category[]>([
   {category: '购物', iconName: 'shopping', isShow: true, type: '-'},
   {category: '交通', iconName: 'car', isShow: true, type: '-'},
   {category: '服饰', iconName: 'cloth', isShow: true, type: '+'},
-  {category: '通讯', iconName: 'phone', isShow: true, type: '-'},
+  {category: '通讯', iconName: 'phone', isShow: false, type: '-'},
   {category: '交通', iconName: 'car', isShow: true, type: '+'},
   {category: '服饰', iconName: 'cloth', isShow: true, type: '-'},
-  {category: '通讯', iconName: 'phone', isShow: true, type: '-'}
+  {category: '通讯', iconName: 'phone', isShow: false, type: '+'}
 ]);
 provide('categoryList', categoryList);
 </script>

@@ -5,10 +5,10 @@ import {computed, inject, ref, Ref} from 'vue';
 const type = ref('+');
 const categoryList = inject<Ref<Category[]>>('categoryList')!;
 const isShowCategory = computed(() => {
-  return categoryList.value.filter(item => item.isShow);
+  return categoryList.value.filter(item => item.isShow && item.type === type.value);
 });
 const unShowCategory = computed(() => {
-  return categoryList.value.filter(item => !item.isShow);
+  return categoryList.value.filter(item => !item.isShow && item.type === type.value);
 });
 const toggle = (value: string) => type.value = value;
 </script>
@@ -16,7 +16,7 @@ const toggle = (value: string) => type.value = value;
 <template>
   <Teleport to="body">
     <div class="nav top">
-      <span class="title">目前共xxx个类别</span>
+      <span class="title">目前共{{ isShowCategory.length }}个类别</span>
       <div class="type">
         <span :class="{selected:type==='-'}" @click="toggle('-')">支出</span>
         <span>/</span>
