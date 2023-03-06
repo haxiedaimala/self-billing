@@ -11,12 +11,12 @@ import Icon from '@/components/Icon.vue';
       <span>收入</span>
     </div>
   </div>
-  <ul class="item">
+  <ul class="item item-first">
     <li>
       <span class="category">
         <Icon name="food"/>
       </span>
-      <span>餐饮</span>
+      <span>餐饮1</span>
       <Icon name="menu" class="menu"/>
     </li>
     <li>
@@ -171,6 +171,10 @@ import Icon from '@/components/Icon.vue';
     .menu {
       margin-left: auto;
     }
+  }
+
+  &.item-first {
+    margin-top: 100px;
   }
 }
 </style>

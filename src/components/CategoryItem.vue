@@ -68,7 +68,6 @@ const toggle = (value: Category) => {
       .icon {
         width: 3em;
         height: 3em;
-        border: 1px solid var(--color-border);
       }
     }
   }
