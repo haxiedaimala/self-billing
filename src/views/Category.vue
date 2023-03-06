@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import Icon from '@/components/Icon.vue';
+import {computed, inject, Ref} from 'vue';
+
+const categoryList = inject<Ref<Category[]>>('categoryList')!;
+const isShowCategory = computed(() => {
+  return categoryList.value.filter(item => item.isShow);
+});
+const unShowCategory = computed(() => {
+  return categoryList.value.filter(item => !item.isShow);
+});
 </script>
 
 <template>
@@ -13,99 +22,31 @@ import Icon from '@/components/Icon.vue';
       </div>
     </div>
   </Teleport>
+
   <ul class="item item-first">
-    <li>
+    <li v-for="item in isShowCategory" :key="item.category">
       <span class="category">
-        <Icon name="food"/>
+        <Icon :name="item.iconName"/>
         <Icon name="delete" class="delete"/>
       </span>
-      <span>餐饮1</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
+      <span>{{ item.category }}</span>
       <Icon name="menu" class="menu"/>
     </li>
   </ul>
-  <div class="nav">
-    <span class="title">更多类别</span>
-  </div>
-  <ul class="item">
-    <li>
+  <template v-if="unShowCategory.length>0">
+    <div class="nav">
+      <span class="title">更多类别</span>
+    </div>
+    <ul class="item">
+      <li v-for="item in unShowCategory" :key="item.category">
       <span class="category">
-        <Icon name="food"/>
+        <Icon :name="item.iconName"/>
         <Icon name="add" class="add"/>
       </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-    <li>
-      <span class="category">
-        <Icon name="food"/>
-      </span>
-      <span>餐饮</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-  </ul>
+        <span>{{ item.category }}</span>
+      </li>
+    </ul>
+  </template>
 </template>
 
 <style lang="scss" scoped>
