@@ -2,11 +2,14 @@
 import Types from '@/components/Types.vue';
 import CategoryItem from '@/components/CategoryItem.vue';
 import NumberPanel from '@/components/NumberPanel.vue';
+import {ref} from 'vue';
+
+const type = ref('-');
 </script>
 
 <template>
   <div class="wrapper">
-    <Types/>
+    <Types v-model="type"/>
     <CategoryItem/>
     <NumberPanel/>
   </div>
