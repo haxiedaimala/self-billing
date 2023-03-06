@@ -3,18 +3,21 @@ import Icon from '@/components/Icon.vue';
 </script>
 
 <template>
-  <div class="nav top">
-    <span class="title">目前共xxx个类别</span>
-    <div class="type">
-      <span class="selected">支出</span>
-      <span>/</span>
-      <span>收入</span>
+  <Teleport to="body">
+    <div class="nav top">
+      <span class="title">目前共xxx个类别</span>
+      <div class="type">
+        <span class="selected">支出</span>
+        <span>/</span>
+        <span>收入</span>
+      </div>
     </div>
-  </div>
+  </Teleport>
   <ul class="item item-first">
     <li>
       <span class="category">
         <Icon name="food"/>
+        <Icon name="delete" class="delete"/>
       </span>
       <span>餐饮1</span>
       <Icon name="menu" class="menu"/>
@@ -90,6 +93,7 @@ import Icon from '@/components/Icon.vue';
     <li>
       <span class="category">
         <Icon name="food"/>
+        <Icon name="add" class="add"/>
       </span>
       <span>餐饮</span>
       <Icon name="menu" class="menu"/>
@@ -161,11 +165,23 @@ import Icon from '@/components/Icon.vue';
       justify-content: center;
       align-items: center;
       margin-right: 1em;
+      position: relative;
+
+      .icon.add,
+      .icon.delete {
+        position: absolute;
+        width: 1.5em;
+        height: 1.5em;
+        top: 0;
+        right: 0;
+        transform: translate(40%, -50%);
+      }
 
       .icon {
         width: 2em;
         height: 2em;
       }
+
     }
 
     .menu {
