@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Icon from '@/components/Icon.vue';
 import {computed, inject, ref, Ref} from 'vue';
+import {useRouter} from 'vue-router';
 
 const type = ref('-');
+const router = useRouter();
 const categoryList = inject<Ref<Category[]>>('categoryList')!;
 const isShowCategory = computed(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
@@ -14,11 +16,13 @@ const toggle = (value: string) => type.value = value;
 const toggleIsShow = (value: Category) => {
   value.isShow = !value.isShow;
 };
+const goBack = () => router.back();
 </script>
 
 <template>
   <Teleport to="body">
     <div class="nav top">
+      <Icon name="left" class="left" @click="goBack"/>
       <span class="title">目前共{{ isShowCategory.length }}个类别</span>
       <div class="type">
         <span :class="{selected:type==='-'}" @click="toggle('-')">支出</span>
@@ -60,8 +64,14 @@ const toggleIsShow = (value: Category) => {
   display: flex;
   font-size: 18px;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.8em 1.2em;
+  padding: 0.8em 2em;
+
+  .left {
+    width: 1.5em;
+    height: 1.5em;
+    margin-left: -1.5em;
+    margin-right: 0.3em;
+  }
 
   .title {
     font-weight: bold;
@@ -83,6 +93,7 @@ const toggleIsShow = (value: Category) => {
 
   .type {
     color: #878785;
+    margin-left: auto;
 
     span:not(:first-child) {
       margin-left: 5px;
@@ -99,7 +110,7 @@ const toggleIsShow = (value: Category) => {
   li {
     display: flex;
     align-items: center;
-    padding: 0.8em 1.2em;
+    padding: 0.8em 2em;
     width: 100%;
 
     .category {
