@@ -1,3 +1,20 @@
+<script setup lang="ts">
+//标签类别
+import {provide, ref} from 'vue';
+
+const categoryList = ref([
+  {category: '餐饮', iconName: 'food', isShow: true},
+  {category: '购物', iconName: 'shopping', isShow: true},
+  {category: '交通', iconName: 'car', isShow: true},
+  {category: '服饰', iconName: 'cloth', isShow: true},
+  {category: '通讯', iconName: 'phone', isShow: true},
+  {category: '交通', iconName: 'car', isShow: false},
+  {category: '服饰', iconName: 'cloth', isShow: true},
+  {category: '通讯', iconName: 'phone', isShow: true}
+]);
+provide('categoryList', categoryList);
+</script>
+
 <template>
   <router-view/>
 </template>
