@@ -7,9 +7,9 @@
 @import "~@/assets/styles/reset.scss";
 
 :root {
-  --color: #ffce57;
+  --color-bg: #ffce57;
   --color-selected: #d9576f;
-  --border-color:#0d0d0d;
+  --color-border:#0d0d0d;
 }
 
 #app {

@@ -104,10 +104,15 @@ import Icon from '@/components/Icon.vue';
 </template>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/helper.scss";
+
 .wrapper {
-  padding: 0 1.5em;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   .type {
+    padding: 0 1.5em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -142,14 +147,14 @@ import Icon from '@/components/Icon.vue';
   }
 
   .category {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    height: 290px;
+    padding: 0 1.5em;
     font-size: 14px;
+    overflow: auto;
 
     li {
       width: 25%;
-      display: flex;
+      display: inline-flex;
       justify-content: center;
       align-items: center;
       padding: 8px;
@@ -159,11 +164,12 @@ import Icon from '@/components/Icon.vue';
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        width: 64px;
-        height: 64px;
-        border: 1px solid var(--border-color);
+        width: 56px;
+        height: 56px;
+        border: 1px solid var(--color-border);
         border-radius: 50%;
         padding: 5px;
+        cursor: pointer;
 
         &.selected {
           border-color: var(--color-selected);
@@ -173,6 +179,67 @@ import Icon from '@/components/Icon.vue';
           width: 3em;
           height: 3em;
         }
+      }
+    }
+  }
+
+  .panel {
+    @extend %innerShadow;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    margin-top: 1em;
+    background-color: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+
+    .panel-info {
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+      border: 1px solid var(--color-border);
+
+      .notes {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        padding: 0.6em 1em;
+        border: none;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        background-color: transparent;
+      }
+
+      .output {
+        padding-right: 0.8em;
+        font-size: 24px;
+        font-family: Consolas, monospace;
+      }
+    }
+
+    .numberPad {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      flex-wrap: wrap;
+      flex: 1;
+      margin-top: 5px;
+
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.2em;
+        font-size: 18px;
+        margin: 5px 0;
+        width: 21%;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        background-color: #fff;
+        cursor: pointer;
+        box-shadow: inset 0 -3px 5px rgba(194, 194, 194, 1);
       }
     }
   }
