@@ -26,11 +26,11 @@ const toggle = (value: Category) => {
         </div>
       </li>
     </template>
-    <li class="setting">
-      <div class="category-item">
-        <Icon name="food"/>
+    <li>
+      <router-link :to="{name:'category'}" class="category-item">
+        <Icon name="setting"/>
         <span>设置</span>
-      </div>
+      </router-link>
     </li>
   </ul>
 </template>
