@@ -2,8 +2,8 @@
 import Icon from '@/components/Icon.vue';
 
 defineProps<{
-  modelValue?: Category[],
-  selected: Category
+  modelValue: Category[],
+  selected: Category | []
 }>();
 const emits = defineEmits<{
   (e: 'update:selected', value: Category): void

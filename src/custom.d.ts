@@ -1,6 +1,8 @@
 interface Category {
+  id: number
   category: string,
   iconName: string,
   isShow: boolean,
-  type: '-' | '+'
+  type: '-' | '+',
+  created?: boolean
 }

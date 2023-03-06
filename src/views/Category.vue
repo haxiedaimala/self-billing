@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import Icon from '@/components/Icon.vue';
-import {computed, inject, ref, Ref} from 'vue';
+import {computed, ref} from 'vue';
 import TopNav from '@/components/TopNav.vue';
+import {useStore} from 'vuex';
 
+const store = useStore();
 const type = ref('-');
-const categoryList = inject<Ref<Category[]>>('categoryList')!;
-const isShowCategory = computed(() => {
-  return categoryList.value.filter(item => item.isShow && item.type === type.value);
-});
-const unShowCategory = computed(() => {
-  return categoryList.value.filter(item => !item.isShow && item.type === type.value);
-});
+const categoryList = computed<Category[]>(() => store.state.categoryList);
+const isShowCategory = computed(() => categoryList.value.filter(item => item.isShow && item.type === type.value));
+const unShowCategory = computed(() => categoryList.value.filter(item => !item.isShow && item.type === type.value));
 const toggleIsShow = (value: Category) => {
   value.isShow = !value.isShow;
+  store.commit('updateCategory', value);
 };
 </script>
 

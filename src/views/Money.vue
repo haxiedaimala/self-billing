@@ -2,12 +2,13 @@
 import Types from '@/components/Types.vue';
 import CategoryItem from '@/components/CategoryItem.vue';
 import NumberPanel from '@/components/NumberPanel.vue';
-import {computed, inject, Ref, ref} from 'vue';
+import {computed, ref} from 'vue';
+import {useStore} from 'vuex';
 
 //支付类型
 const type = ref('-');
-//标签类别
-const categoryList = inject<Ref<Category[]>>('categoryList')!;
+const store = useStore();
+const categoryList = computed<Category[]>(() => store.state.categoryList);
 const dateSource = computed<Category[]>(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
 });
