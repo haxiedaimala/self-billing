@@ -29,6 +29,7 @@ module.exports = {
     }
   ],
   'globals': {
-    '__WebpackModuleApi': 'writable'
+    '__WebpackModuleApi': 'writable',
+    'Category': true
   }
 }
