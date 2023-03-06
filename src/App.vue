@@ -9,6 +9,7 @@
 :root {
   --color: #ffce57;
   --color-selected: #d9576f;
+  --border-color:#0d0d0d;
 }
 
 #app {
