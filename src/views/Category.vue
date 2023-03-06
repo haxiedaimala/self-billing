@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Icon from '@/components/Icon.vue';
-import {computed, inject, Ref} from 'vue';
+import {computed, inject, ref, Ref} from 'vue';
 
+const type = ref('+');
 const categoryList = inject<Ref<Category[]>>('categoryList')!;
 const isShowCategory = computed(() => {
   return categoryList.value.filter(item => item.isShow);
@@ -9,6 +10,7 @@ const isShowCategory = computed(() => {
 const unShowCategory = computed(() => {
   return categoryList.value.filter(item => !item.isShow);
 });
+const toggle = (value: string) => type.value = value;
 </script>
 
 <template>
@@ -16,9 +18,9 @@ const unShowCategory = computed(() => {
     <div class="nav top">
       <span class="title">目前共xxx个类别</span>
       <div class="type">
-        <span class="selected">支出</span>
+        <span :class="{selected:type==='-'}" @click="toggle('-')">支出</span>
         <span>/</span>
-        <span>收入</span>
+        <span :class="{selected:type==='+'}" @click="toggle('+')">收入</span>
       </div>
     </div>
   </Teleport>
