@@ -57,6 +57,10 @@ const goBack = () => router.back();
       </li>
     </ul>
   </template>
+
+  <div class="setCategory">
+    <span>+ 自定义分类</span>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -150,5 +154,16 @@ const goBack = () => router.back();
   &.item-first {
     margin-top: 100px;
   }
+}
+
+.setCategory {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 20px;
+  padding: 0.8em 0;
+  text-align: center;
+  background-color: var(--color-bg);
 }
 </style>
