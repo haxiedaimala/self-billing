@@ -36,30 +36,20 @@ const toggle = (value: Category) => {
 </template>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/helper.scss";
+
 .category {
+  @extend %category;
   height: 290px;
   padding: 0 1.5em;
   font-size: 14px;
-  overflow: auto;
 
   li {
     width: 25%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
 
     .category-item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
       width: 56px;
       height: 56px;
-      border: 1px solid var(--color-border);
-      border-radius: 50%;
-      padding: 5px;
-      cursor: pointer;
 
       &.selected {
         border-color: var(--color-selected);

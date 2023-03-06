@@ -280,38 +280,17 @@ const type = ref('-');
 }
 
 .category {
+  @extend %category;
   padding: 0.5em 2em;
-  overflow: auto;
   height: 260px;
 
   li {
     width: 20%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px;
 
     .category-item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
       width: 3em;
       height: 3em;
-      border: 1px solid var(--color-border);
-      border-radius: 50%;
-      padding: 5px;
-      cursor: pointer;
       background-color: var(--color-category-bg);
-
-      &.selected {
-        border-color: var(--color-selected);
-      }
-
-      .icon {
-        width: 2em;
-        height: 2em;
-      }
     }
   }
 }
