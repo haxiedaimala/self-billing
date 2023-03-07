@@ -30,6 +30,8 @@ module.exports = {
   ],
   'globals': {
     '__WebpackModuleApi': 'writable',
-    'Category': true
+    'Category': true,
+    'RecordItem': true,
+    'GroupList': true
   }
 }

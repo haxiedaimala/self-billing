@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Layout from '@/components/Layout.vue';
 import Icon from '@/components/Icon.vue';
-import {reactive} from 'vue';
+import {computed, reactive} from 'vue';
 import {useRouter} from 'vue-router';
+import {useStore} from 'vuex';
+import dayjs from 'dayjs';
 
 const router = useRouter();
 const routeInfos = reactive([
@@ -11,11 +13,37 @@ const routeInfos = reactive([
   {name: 'money', text: '记账', iconName: 'money'},
   {name: 'category', text: '类别', iconName: 'category'},
 ]);
+const store = useStore();
+const recordList = computed<RecordItem[]>(() => store.state.recordList);
+const sort = (date: RecordItem[]) => {
+  const newObj = JSON.parse(JSON.stringify(date)) as RecordItem[];
+  return newObj.sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
+};
+const newRecordList = computed(() => {
+  if (recordList.value.length === 0) return;
+  let groupList: GroupList[] = [];
+  let newList = sort(recordList.value);
+  groupList[0] = {createAt: newList[0].createAt, items: [newList[0]]};
+  for (let i = 1; i < newList.length; i++) {
+    const current = newList[i];
+    const last = groupList[groupList.length - 1];
+    if (dayjs(current.createAt).isSame(dayjs(last.createAt), 'day')) {
+      last.items.push(current);
+    } else {
+      groupList.push({createAt: current.createAt, items: [current]});
+    }
+  }
+  console.log(groupList);
+  return [];
+});
 const goBack = () => router.back();
 </script>
 
 <template>
   <Layout :routes="routeInfos">
+    {{
+      newRecordList
+    }}
     <Teleport to="body">
       <div class="nav">
         <Icon name="left" class="left" @click="goBack"/>

@@ -14,3 +14,11 @@ interface RecordItem {
   account: number,
   createAt: string
 }
+
+interface GroupList {
+  createAt: string,
+  expend?: number,
+  income?: number,
+  sum?: number,
+  items: RecordItem[]
+}
