@@ -12,7 +12,7 @@ const categoryList = computed<Category[]>(() => store.state.categoryList);
 const dateSource = computed<Category[]>(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
 });
-const selectCategory = ref<Category>(dateSource.value[0]);
+const selectCategory =computed<Category>(()=>dateSource.value[0])
 </script>
 
 <template>

@@ -2,8 +2,21 @@
 import Icon from '@/components/Icon.vue';
 import TopNav from '@/components/TopNav.vue';
 import {ref} from 'vue';
+import store from '@/store';
 
+const svgIcon = ['car', 'shopping', 'phone', 'add', 'pen', 'menu'];
 const type = ref('-');
+const inputItem = ref<HTMLInputElement>();
+const selectedIcon = ref(svgIcon[1]);
+const toggle = (value: string) => {
+  selectedIcon.value = value;
+};
+const save = () => {
+  const category = inputItem.value?.value;
+  if (category?.length === 0) return window.alert('类别名称不为空');
+  let obj = {category: category, iconName: selectedIcon.value, type: type.value};
+  store.commit('createCategory', obj);
+};
 </script>
 
 <template>
@@ -11,7 +24,7 @@ const type = ref('-');
   <div class="content">
     <span>新建分类名称</span>
     <div class="edit">
-      <input type="text" placeholder="限5个汉字,不为空或重复..." maxlength="5">
+      <input type="text" placeholder="限5个汉字,不为空或重复..." maxlength="5" ref="inputItem">
       <Icon name="pen"/>
     </div>
   </div>
@@ -19,215 +32,13 @@ const type = ref('-');
     <span class="title">更多类别</span>
   </div>
   <ul class="category">
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="shopping"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-
-
-    <li>
-      <div class="category-item">
-        <Icon name="food"/>
-      </div>
-    </li>
-    <li>
-      <div class="category-item">
-        <Icon name="car"/>
+    <li v-for="item in svgIcon" :key="item">
+      <div class="category-item" :class="{selected:item===selectedIcon}" @click="toggle(item)">
+        <Icon :name="item"/>
       </div>
     </li>
   </ul>
-  <router-link :to="{name:'setCategory'}" class="setCategory">
+  <router-link :to="{name:'setCategory'}" class="setCategory" @click="save">
     <span>保存</span>
   </router-link>
 </template>
@@ -291,6 +102,10 @@ const type = ref('-');
       width: 3em;
       height: 3em;
       background-color: var(--color-category-bg);
+
+      &.selected {
+        border-color: var(--color-selected);
+      }
     }
   }
 }

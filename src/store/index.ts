@@ -1,7 +1,7 @@
 import {createStore} from 'vuex';
 import createId from '@/createId';
 
-type CategoryItem = { id?: number; category: string, iconName: string, isShow: boolean, type: string, created: boolean }
+type CategoryItem = { id?: number; category: string, iconName: string, isShow?: boolean, type: string, created?: boolean }
 const store = createStore({
   state: {
     categoryList: [] as Category[]
@@ -21,9 +21,15 @@ const store = createStore({
       if (names.indexOf(obj.category) >= 0) {
         window.alert('标签名已存在');
       } else {
-        state.categoryList.push(Object.assign({}, {id: createId()}, obj) as Category);
-        store.commit('saveCategory');
-        window.alert('创建成功');
+        if ('id' in obj) {
+          window.alert('重复创建');
+        } else {
+          obj.isShow = true;
+          obj.created = true;
+          state.categoryList.push(Object.assign({}, {id: createId()}, obj) as Category);
+          store.commit('saveCategory');
+          window.alert('创建成功');
+        }
       }
     },
     updateCategory(state, obj: Category) {
