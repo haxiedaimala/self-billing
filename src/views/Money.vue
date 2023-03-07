@@ -11,17 +11,21 @@ const categoryList = computed<Category[]>(() => store.state.categoryList);
 const dateSource = computed<Category[]>(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
 });
-const selectCategory = ref<Category>(dateSource.value[0]);
+const selectCategory = ref<Category>(dateSource.value[0] || []);
 const note = ref('');
 const account = ref('0.00');
 const date = ref(new Date().toISOString());
+
 const submitRecord = (value: { note: string, account: number, createAt: string }) => {
+  if (selectCategory.value === undefined) return window.alert('请选择标签');
   Object.assign(value, {category: selectCategory.value.category, type: type.value});
+  store.commit('createRecord', value);
 };
 </script>
 
 <template>
   <div class="wrapper">
+    {{ selectCategory }}
     <Types v-model="type"/>
     <CategoryItem :type="type" v-model="dateSource" v-model:selected="selectCategory"/>
     <NumberPanel :note="note" :output="account" :date="date" @submit="submitRecord"/>

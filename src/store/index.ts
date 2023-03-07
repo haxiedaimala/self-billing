@@ -4,10 +4,22 @@ import createId from '@/createId';
 type CategoryItem = { id?: number; category: string, iconName: string, isShow?: boolean, type: string, created?: boolean }
 const store = createStore({
   state: {
-    categoryList: [] as Category[]
+    categoryList: [] as Category[],
+    recordList: [] as RecordItem[]
   },
   getters: {},
   mutations: {
+    fetRecordList(state) {
+      state.recordList = JSON.parse(localStorage.getItem('recordList') || '[]');
+    },
+    createRecord(state, obj: RecordItem) {
+      state.recordList.push(obj);
+      store.commit('saveRecord');
+      window.alert('记账成功');
+    },
+    saveRecord(state) {
+      localStorage.setItem('recordList', JSON.stringify(state.recordList));
+    },
     fetCategoryList(state) {
       state.categoryList = JSON.parse(localStorage.getItem('categoryList') || '[]');
       if (state.categoryList.length === 0) {
@@ -55,4 +67,5 @@ const store = createStore({
   modules: {}
 });
 store.commit('fetCategoryList');
+store.commit('fetRecordList');
 export default store;
