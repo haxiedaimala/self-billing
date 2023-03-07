@@ -3,7 +3,8 @@ import Icon from '@/components/Icon.vue';
 
 defineProps<{
   modelValue: Category[],
-  selected: Category | []
+  selected: Category | [],
+  type: '-' | '+'
 }>();
 const emits = defineEmits<{
   (e: 'update:selected', value: Category): void
@@ -27,7 +28,7 @@ const toggle = (value: Category) => {
       </li>
     </template>
     <li>
-      <router-link :to="{name:'category'}" class="category-item">
+      <router-link :to="{name:'category',query:{type:type}}" class="category-item">
         <Icon name="setting"/>
         <span>设置</span>
       </router-link>

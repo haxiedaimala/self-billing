@@ -3,9 +3,11 @@ import Icon from '@/components/Icon.vue';
 import {computed, ref} from 'vue';
 import TopNav from '@/components/TopNav.vue';
 import {useStore} from 'vuex';
+import {useRoute} from 'vue-router';
 
 const store = useStore();
-const type = ref('-');
+const route = useRoute();
+const type = ref(route.query.type || '-');
 const categoryList = computed<Category[]>(() => store.state.categoryList);
 const isShowCategory = computed(() => categoryList.value.filter(item => item.isShow && item.type === type.value));
 const unShowCategory = computed(() => categoryList.value.filter(item => !item.isShow && item.type === type.value));
@@ -44,7 +46,7 @@ const toggleIsShow = (value: Category) => {
     </ul>
   </template>
 
-  <router-link :to="{name:'setCategory'}" class="setCategory">
+  <router-link :to="{name:'setCategory',query:{type:type}}" class="setCategory">
     <span>+ 自定义分类</span>
   </router-link>
 </template>

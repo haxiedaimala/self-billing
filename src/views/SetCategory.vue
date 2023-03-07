@@ -3,9 +3,12 @@ import Icon from '@/components/Icon.vue';
 import TopNav from '@/components/TopNav.vue';
 import {ref} from 'vue';
 import store from '@/store';
+import {useRoute, useRouter} from 'vue-router';
 
+const route = useRoute();
+const router = useRouter();
 const svgIcon = ['car', 'shopping', 'phone', 'add', 'pen', 'menu'];
-const type = ref('-');
+const type = ref(route.query.type || '-');
 const inputItem = ref<HTMLInputElement>();
 const selectedIcon = ref(svgIcon[1]);
 const toggle = (value: string) => {
@@ -16,6 +19,12 @@ const save = () => {
   if (category?.length === 0) return window.alert('类别名称不为空');
   let obj = {category: category, iconName: selectedIcon.value, type: type.value};
   store.commit('createCategory', obj);
+  router.push({
+    name: 'category',
+    query: {
+      type: type.value
+    }
+  });
 };
 </script>
 
