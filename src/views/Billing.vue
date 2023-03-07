@@ -14,6 +14,7 @@ const routeInfos = reactive([
   {name: 'category', text: '类别', iconName: 'category'},
 ]);
 const store = useStore();
+
 const recordList = computed<RecordItem[]>(() => store.state.recordList);
 const sort = (date: RecordItem[]) => {
   const newObj = JSON.parse(JSON.stringify(date)) as RecordItem[];
@@ -23,27 +24,36 @@ const newRecordList = computed(() => {
   if (recordList.value.length === 0) return;
   let groupList: GroupList[] = [];
   let newList = sort(recordList.value);
-  groupList[0] = {createAt: newList[0].createAt, items: [newList[0]]};
+  if (newList[0].type === '-') {
+    groupList[0] = {createAt: newList[0].createAt, exItems: [newList[0]], inItems: []};
+  } else {
+    groupList[0] = {createAt: newList[0].createAt, exItems: [], inItems: [newList[0]]};
+  }
   for (let i = 1; i < newList.length; i++) {
     const current = newList[i];
     const last = groupList[groupList.length - 1];
     if (dayjs(current.createAt).isSame(dayjs(last.createAt), 'day')) {
-      last.items.push(current);
+      current.type === '-' ? last.exItems.push(current) : last.inItems.push(current);
     } else {
-      groupList.push({createAt: current.createAt, items: [current]});
+      if (current.type === '-') {
+        groupList.push({createAt: current.createAt, exItems: [current], inItems: []});
+      } else {
+        groupList.push({createAt: current.createAt, exItems: [], inItems: [current]});
+      }
     }
   }
-  console.log(groupList);
-  return [];
+  groupList.forEach(group => {
+    group.expend = group.exItems.reduce((sum, item) => sum + item.account, 0);
+    group.income = group.inItems.reduce((sum, item) => sum + item.account, 0);
+    group.sum = group.income - group.expend;
+  });
+  return groupList;
 });
 const goBack = () => router.back();
 </script>
 
 <template>
   <Layout :routes="routeInfos">
-    {{
-      newRecordList
-    }}
     <Teleport to="body">
       <div class="nav">
         <Icon name="left" class="left" @click="goBack"/>

@@ -20,5 +20,6 @@ interface GroupList {
   expend?: number,
   income?: number,
   sum?: number,
-  items: RecordItem[]
+  exItems: RecordItem[],
+  inItems: RecordItem[]
 }
