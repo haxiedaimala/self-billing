@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Layout from '@/components/Layout.vue';
 import Icon from '@/components/Icon.vue';
-import {computed, reactive} from 'vue';
+import {computed, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {useStore} from 'vuex';
-import dayjs from 'dayjs';
+import dayjs, {OpUnitType} from 'dayjs';
 
 const router = useRouter();
 const routeInfos = reactive([
@@ -14,13 +14,12 @@ const routeInfos = reactive([
   {name: 'category', text: '类别', iconName: 'category'},
 ]);
 const store = useStore();
-
 const recordList = computed<RecordItem[]>(() => store.state.recordList);
 const sort = (date: RecordItem[]) => {
   const newObj = JSON.parse(JSON.stringify(date)) as RecordItem[];
   return newObj.sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
 };
-const newRecordList = computed(() => {
+const filterGroupList = (data: string) => {
   if (recordList.value.length === 0) return;
   let groupList: GroupList[] = [];
   let newList = sort(recordList.value);
@@ -32,7 +31,7 @@ const newRecordList = computed(() => {
   for (let i = 1; i < newList.length; i++) {
     const current = newList[i];
     const last = groupList[groupList.length - 1];
-    if (dayjs(current.createAt).isSame(dayjs(last.createAt), 'day')) {
+    if (dayjs(current.createAt).isSame(dayjs(last.createAt), `${data}` as OpUnitType)) {
       current.type === '-' ? last.exItems.push(current) : last.inItems.push(current);
     } else {
       if (current.type === '-') {
@@ -48,8 +47,22 @@ const newRecordList = computed(() => {
     group.sum = group.income - group.expend;
   });
   return groupList;
-});
+};
+const yearGroupList = computed(() => filterGroupList('year') || []);
+const monthGroupList = computed(() => filterGroupList('month') || []);
 const goBack = () => router.back();
+const year = ref(dayjs().year());
+const toggleYear = () => {
+  const text = window.prompt('请输入查询的年份：');
+  if (text === 'null') return;
+  if (text === '') return window.alert('年份不能为空');
+  if (!/^\d{4}$/.test(text!)) return window.alert('只能输入4个数字');
+  year.value = parseInt(text!);
+};
+const sum = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.sum!, 0));
+const expend = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.expend!, 0));
+const income = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.income!, 0));
+console.log(monthGroupList.value);
 </script>
 
 <template>
@@ -57,60 +70,59 @@ const goBack = () => router.back();
     <Teleport to="body">
       <div class="nav">
         <Icon name="left" class="left" @click="goBack"/>
-        <button class="year">2023年的账单</button>
+        <button class="year" @click="toggleYear">{{ year }}年的账单</button>
       </div>
     </Teleport>
-    <div class="item-list top">
-      <div class="title">2023年</div>
-      <div class="table">
-        <div class="table-title">
-          <span class="left">本年结余</span>
-          <span class="right">￥2222.00</span>
-        </div>
-        <div class="table-content">
-          <div class="item">
-            <span>本年支出</span>
-            <span class="right">- ￥2562</span>
+    <template v-if="yearGroupList.length>0">
+      <div class="item-list top">
+        <div class="title">{{ year }}年</div>
+        <div class="table">
+          <div class="table-title">
+            <span class="left">本年结余</span>
+            <span class="right">￥{{ sum }}</span>
           </div>
-          <div class="item">
-            <span>本年收入</span>
-            <span class="right">+ ￥2562</span>
+          <div class="table-content">
+            <div class="item">
+              <span>本年支出</span>
+              <span class="right">- ￥{{ expend }}</span>
+            </div>
+            <div class="item">
+              <span>本年收入</span>
+              <span class="right">+ ￥{{ income }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="item-list">
-      <div class="title">账单列表</div>
-      <div class="table">
-        <ul class="table-title info">
-          <li>月份</li>
-          <li>支出</li>
-          <li>收入</li>
-          <li>结余</li>
-          <li></li>
-        </ul>
-        <div class="table-content">
-          <ul class="item">
-            <li>3月</li>
-            <li>-253.00</li>
-            <li>+566.00</li>
-            <li>+222</li>
-            <li>
-              <Icon name="left"/>
-            </li>
+      <div class="item-list">
+        <div class="title">账单列表</div>
+        <div class="table">
+          <ul class="table-title info">
+            <li>月份</li>
+            <li>支出</li>
+            <li>收入</li>
+            <li>结余</li>
+            <li></li>
           </ul>
-          <ul class="item">
-            <li>3月</li>
-            <li>-253.00</li>
-            <li>+566.00</li>
-            <li>+222</li>
-            <li>
-              <Icon name="left"/>
-            </li>
-          </ul>
+          <div class="table-content">
+            <ul class="item" v-for="(group,index) in monthGroupList" :key="index">
+              <li>{{ dayjs(group.createAt).month() + 1 }}月</li>
+              <li>-{{ group.expend }}</li>
+              <li>+{{ group.income }}</li>
+              <li>{{ group.sum }}</li>
+              <li>
+                <Icon name="left"/>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
+    <template v-else>
+      <div class="un-show-content">
+        <span>抱歉当前没有记录哦~~~</span>
+        <router-link :to="{name:'money'}" class="un-show-link">去记账</router-link>
+      </div>
+    </template>
   </Layout>
 </template>
 
@@ -213,6 +225,27 @@ const goBack = () => router.back();
 
   &.top {
     margin-top: 75px;
+  }
+}
+
+.un-show-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .un-show-link {
+    display: block;
+    padding: 0.5em 2em;
+    margin-top: 2em;
+    font-size: 18px;
+    background-color: var(--color-selected);
+    color: #fff;
+    border-radius: 0.8em;
+    border: 1px solid var(--color-border);
   }
 }
 </style>

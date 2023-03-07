@@ -69,8 +69,8 @@ const clear = () => {
 };
 const toStart = () => {
   output.value = props.account;
-  dateTime.value = props.date;
-  notes.value = dayjs(props.date).format('YYYY-MM-DD');
+  dateTime.value = dayjs(props.date).format('YYYY-MM-DD');
+  notes.value = props.note;
 };
 const ok = () => {
   if (output.value.indexOf('+') >= 0 || output.value.indexOf('-') >= 0) {
