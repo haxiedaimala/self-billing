@@ -25,7 +25,6 @@ const submitRecord = (value: { note: string, account: number, createAt: string }
 
 <template>
   <div class="wrapper">
-    {{ selectCategory }}
     <Types v-model="type"/>
     <CategoryItem :type="type" v-model="dateSource" v-model:selected="selectCategory"/>
     <NumberPanel :note="note" :output="account" :date="date" @submit="submitRecord"/>
