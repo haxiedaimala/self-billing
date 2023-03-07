@@ -1,7 +1,27 @@
 <script setup lang="ts">
 import {ref} from 'vue';
+import dayjs from 'dayjs';
 
-const output = ref('0.00');
+const props = defineProps({
+  note: {
+    type: String,
+    default: () => ''
+  },
+  date: {
+    type: String,
+    default: () => new Date().toISOString()
+  },
+  account: {
+    type: String,
+    default: () => '0.00'
+  },
+});
+const emit = defineEmits<{
+  (e: 'submit', value: { note: string, account: number, createAt: string }): void
+}>();
+const output = ref(props.account.toString());
+const dateTime = ref(dayjs(props.date).format('YYYY-MM-DD'));
+const notes = ref(props.note);
 const inputContent = (e: Event) => {
   const input = (e.target as HTMLButtonElement).innerText;
   if (output.value.length >= 16) return;
@@ -38,41 +58,63 @@ const inputContent = (e: Event) => {
     }
     return output.value = parseFloat(output.value) + input;
   }
-
   output.value += input;
-
 };
 const remove = () => {
   const number = output.value.slice(0, -1);
   output.value = number.length > 0 ? number : '0.00';
+};
+const clear = () => {
+  output.value = '0.00';
+};
+const toStart = () => {
+  output.value = props.account;
+  dateTime.value = props.date;
+  notes.value = dayjs(props.date).format('YYYY-MM-DD');
+};
+const ok = () => {
+  if (output.value.indexOf('+') >= 0 || output.value.indexOf('-') >= 0) {
+    if (output.value.split('+').length === 1) {
+      let arr = output.value.split('-');
+      if (arr[1] === '.') arr[1] = '0';
+      output.value = (parseFloat(arr[0]) - parseFloat(arr[1])).toString();
+    } else {
+      let arr = output.value.split('+');
+      if (arr[1] === '.') arr[1] = '0';
+      output.value = (parseFloat(arr[0]) + parseFloat(arr[1])).toString();
+    }
+  }
+  output.value = parseFloat(output.value).toString();
+  if (parseFloat(output.value) < 0 || output.value === '0.00' || output.value === '0') return window.alert('金额需大于0');
+  emit('submit', {note: notes.value, account: parseFloat(output.value), createAt: dateTime.value});
+  toStart();
 };
 </script>
 
 <template>
   <div class="numberPanel">
     <div class="panel-info">
-      <input class="notes" type="text" placeholder="点击输入备注">
+      <input class="notes" type="text" placeholder="点击输入备注" v-model="notes">
       <div class="output">￥{{ output }}</div>
     </div>
+    <input class="panel-info date" type="date" v-model="dateTime"/>
     <div class="numberPad">
       <button @click="inputContent">7</button>
       <button @click="inputContent">8</button>
       <button @click="inputContent">9</button>
-      <label>
-        <input type="date"/>
-      </label>
+      <button @click="inputContent">+</button>
       <button @click="inputContent">4</button>
       <button @click="inputContent">5</button>
       <button @click="inputContent">6</button>
-      <button @click="inputContent">+</button>
+      <button @click="inputContent">-</button>
       <button @click="inputContent">1</button>
       <button @click="inputContent">2</button>
       <button @click="inputContent">3</button>
-      <button @click="inputContent">-</button>
-      <button @click="inputContent">.</button>
+      <button @click="clear">清空</button>
       <button @click="inputContent">0</button>
+      <button @click="inputContent">.</button>
       <button @click="remove">删除</button>
-      <button>完成</button>
+      <button @click="ok">完成</button>
     </div>
   </div>
 </template>
@@ -101,7 +143,7 @@ const remove = () => {
       display: flex;
       flex: 1;
       align-items: center;
-      padding: 0.6em 1em;
+      padding: 0.4em 1em;
       border: none;
       overflow: hidden;
       white-space: nowrap;
@@ -114,7 +156,14 @@ const remove = () => {
       font-size: 24px;
       font-family: Consolas, monospace;
     }
+
+    &.date {
+      display: flex;
+      margin-top: 8px;
+      padding: 0.4em 1em;
+    }
   }
+
 
   .numberPad {
     display: flex;

@@ -5,7 +5,6 @@ import NumberPanel from '@/components/NumberPanel.vue';
 import {computed, ref} from 'vue';
 import {useStore} from 'vuex';
 
-//支付类型
 const type = ref('-');
 const store = useStore();
 const categoryList = computed<Category[]>(() => store.state.categoryList);
@@ -13,13 +12,19 @@ const dateSource = computed<Category[]>(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
 });
 const selectCategory = ref<Category>(dateSource.value[0]);
+const note = ref('');
+const account = ref('0.00');
+const date = ref(new Date().toISOString());
+const submitRecord = (value: { note: string, account: number, createAt: string }) => {
+  Object.assign(value, {category: selectCategory.value.category, type: type.value});
+};
 </script>
 
 <template>
   <div class="wrapper">
     <Types v-model="type"/>
     <CategoryItem :type="type" v-model="dateSource" v-model:selected="selectCategory"/>
-    <NumberPanel/>
+    <NumberPanel :note="note" :output="account" :date="date" @submit="submitRecord"/>
   </div>
 </template>
 
