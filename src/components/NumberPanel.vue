@@ -1,28 +1,77 @@
 <script setup lang="ts">
+import {ref} from 'vue';
+
+const output = ref('0.00');
+const inputContent = (e: Event) => {
+  const input = (e.target as HTMLButtonElement).innerText;
+  if (output.value.length >= 16) return;
+  if (input === '.') {
+    if (output.value.indexOf('+') === -1 && output.value.indexOf('-') === -1) {
+      if (output.value !== '0.00' && output.value.indexOf('.') >= 0 && input === '.') return;
+    }
+    if (output.value.split('-').length >= 2) {
+      const arr = output.value.split('-');
+      if (arr[1] === '' || arr[1].indexOf('.') === -1) return output.value += input;
+      if (arr[1].indexOf('.') >= 0) return;
+    }
+    if (output.value.split('+').length >= 2) {
+      const arr = output.value.split('+');
+      if (arr[1] === '' || arr[1].indexOf('.') === -1) return output.value += input;
+      if (arr[1].indexOf('.') >= 0) return;
+    }
+  }
+
+  if (output.value === '0.00' || output.value === '0') {
+    if ('0123456789'.indexOf(input) >= 0) return output.value = input;
+    if ('+-'.indexOf(input) >= 0) return;
+    if (input === '.') return output.value = '0' + input;
+  }
+  if ('+-'.indexOf(input) >= 0) {
+    if (output.value.indexOf('+') >= 0 || output.value.indexOf('-') >= 0) {
+      if (output.value.split('+').length === 1) {
+        let arr = output.value.split('-');
+        output.value = arr[1] === '' ? (arr[0] + input) : (parseFloat(arr[0]) - parseFloat(arr[1])).toString();
+      } else {
+        let arr = output.value.split('+');
+        output.value = arr[1] === '' ? (arr[0] + input) : (parseFloat(arr[0]) + parseFloat(arr[1])).toString();
+      }
+    }
+    return output.value = parseFloat(output.value) + input;
+  }
+
+  output.value += input;
+
+};
+const remove = () => {
+  const number = output.value.slice(0, -1);
+  output.value = number.length > 0 ? number : '0.00';
+};
 </script>
 
 <template>
   <div class="numberPanel">
     <div class="panel-info">
       <input class="notes" type="text" placeholder="点击输入备注">
-      <div class="output">￥0.00</div>
+      <div class="output">￥{{ output }}</div>
     </div>
     <div class="numberPad">
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button>03.15</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>+</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>-</button>
-      <button>.</button>
-      <button>0</button>
-      <button>删除</button>
+      <button @click="inputContent">7</button>
+      <button @click="inputContent">8</button>
+      <button @click="inputContent">9</button>
+      <label>
+        <input type="date"/>
+      </label>
+      <button @click="inputContent">4</button>
+      <button @click="inputContent">5</button>
+      <button @click="inputContent">6</button>
+      <button @click="inputContent">+</button>
+      <button @click="inputContent">1</button>
+      <button @click="inputContent">2</button>
+      <button @click="inputContent">3</button>
+      <button @click="inputContent">-</button>
+      <button @click="inputContent">.</button>
+      <button @click="inputContent">0</button>
+      <button @click="remove">删除</button>
       <button>完成</button>
     </div>
   </div>
@@ -75,7 +124,7 @@
     flex: 1;
     margin-top: 5px;
 
-    button {
+    button, label {
       display: flex;
       justify-content: center;
       align-items: center;

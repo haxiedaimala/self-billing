@@ -6,3 +6,11 @@ interface Category {
   type: '-' | '+',
   created?: boolean
 }
+
+interface RecordItem {
+  category: string,
+  note: string
+  type: '-' | '+'
+  account: number,
+  createAt: string
+}
