@@ -12,13 +12,13 @@ const categoryList = computed<Category[]>(() => store.state.categoryList);
 const dateSource = computed<Category[]>(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
 });
-const selectCategory =computed<Category>(()=>dateSource.value[0])
+const selectCategory = ref<Category>(dateSource.value[0]);
 </script>
 
 <template>
   <div class="wrapper">
     <Types v-model="type"/>
-    <CategoryItem v-model="dateSource" v-model:selected="selectCategory"/>
+    <CategoryItem :type="type" v-model="dateSource" v-model:selected="selectCategory"/>
     <NumberPanel/>
   </div>
 </template>
