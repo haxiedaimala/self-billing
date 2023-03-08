@@ -36,5 +36,6 @@ export function detailInput(year: Ref<number>, month: Ref<number>) {
     monthIncome,
     toggleYear,
     toggleMonth,
+    monthGroupList
   };
 }

@@ -118,25 +118,6 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
 
 .list-top {
   margin-top: 75px;
-
-  .detail-list {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    li {
-      font-size: 16px;
-      color: var(--color-unselected);
-
-      &.selected {
-        color: #333;
-      }
-
-      &.middle {
-        margin: 0 3px;
-      }
-    }
-  }
 }
 
 .details {

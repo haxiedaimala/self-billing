@@ -51,13 +51,14 @@ defineProps<{
 
   .table {
     border: 2px solid var(--color-border);
-    border-radius: 4px;
+    border-radius: 5px;
 
     .table-title {
       @extend %detail-flex;
       padding: 0.5em;
 
       .left {
+        font-weight: bold;
         font-size: 18px;
       }
 
