@@ -49,7 +49,7 @@ const toggle = (value: string) => emits('update:modelValue', value);
   }
 
   .type {
-    color: #878785;
+    color: var(--color-unselected);
     margin-left: auto;
 
     span:not(:first-child) {

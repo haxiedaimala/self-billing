@@ -12,7 +12,7 @@ defineProps<{
   <div class="item-list">
     <div class="title">
       <span>{{ topTitle }}</span>
-      <span><slot name="title-control"/></span>
+      <span><slot/></span>
     </div>
     <div class="table">
       <div class="table-title">

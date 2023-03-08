@@ -14,6 +14,7 @@
   --color-selected: #d9576f;
   --color-border: #0d0d0d;
   --color-category-bg: #fae3eb;
+  --color-unselected: #878785;
 }
 
 #app {
