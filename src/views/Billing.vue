@@ -4,6 +4,7 @@ import Icon from '@/components/Icon.vue';
 import {computed, reactive, ref} from 'vue';
 import {useStore} from 'vuex';
 import dayjs, {OpUnitType} from 'dayjs';
+import DetailList from '@/components/Detail-List.vue';
 
 const routeInfos = reactive([
   {name: 'information', text: '明细', iconName: 'details'},
@@ -88,29 +89,11 @@ const showMonthList = computed(() => {
       </div>
     </Teleport>
     <template v-if="yearGroupList.length>0">
-      <div class="item-list top">
-        <div class="title">{{ year }}年</div>
-        <div class="table">
-          <div class="table-title">
-            <span class="left">本年结余</span>
-            <span class="right">￥{{ sum }}</span>
-          </div>
-          <div class="table-content">
-            <div class="item">
-              <span>本年支出</span>
-              <span class="right">- ￥{{ expend }}</span>
-            </div>
-            <div class="item">
-              <span>本年收入</span>
-              <span class="right">+ ￥{{ income }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DetailList class="list-top" :top-title="year+'年'" type='年' :sum="sum" :expend="expend" :income="income"/>
       <div class="item-list">
         <div class="title">账单列表</div>
         <div class="table">
-          <ul class="table-title info">
+          <ul class="table-title">
             <li>月份</li>
             <li>支出</li>
             <li>收入</li>
@@ -141,6 +124,7 @@ const showMonthList = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+
 .nav {
   display: flex;
   align-items: center;
@@ -159,10 +143,17 @@ const showMonthList = computed(() => {
   }
 }
 
+.list-top {
+  margin-top: 75px;
+}
+
 .item-list {
   padding: 0.5em 1.5em;
 
   .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 20px;
     padding: 0.8em 0;
   }
@@ -176,15 +167,8 @@ const showMonthList = computed(() => {
       align-items: center;
       justify-content: space-between;
       padding: 0.5em;
-
-      .left {
-        font-size: 18px;
-      }
-
-      .right {
-        font-size: 28px;
-        color: var(--color-selected);
-      }
+      background-color: var(--color-bg);
+      border-bottom: 2px solid var(--color-border);
 
       li {
         display: flex;
@@ -197,12 +181,6 @@ const showMonthList = computed(() => {
           flex: 1;
         }
       }
-
-      &.info {
-        background-color: var(--color-bg);
-        border-bottom: 2px solid var(--color-border);
-      }
-
     }
 
     .table-content {
@@ -211,11 +189,6 @@ const showMonthList = computed(() => {
         display: flex;
         align-items: center;
         border-bottom: 1px solid #f2f2f2;
-
-        .right {
-          font-weight: bold;
-          margin-left: auto;
-        }
 
         li {
           display: flex;
@@ -230,10 +203,6 @@ const showMonthList = computed(() => {
         }
       }
     }
-  }
-
-  &.top {
-    margin-top: 75px;
   }
 }
 
