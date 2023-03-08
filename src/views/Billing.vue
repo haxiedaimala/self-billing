@@ -62,7 +62,7 @@ const toggleYear = () => {
 const sum = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.sum!, 0));
 const expend = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.expend!, 0));
 const income = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.income!, 0));
-console.log(monthGroupList.value);
+console.log(yearGroupList.value);
 </script>
 
 <template>
@@ -73,7 +73,7 @@ console.log(monthGroupList.value);
         <button class="year" @click="toggleYear">{{ year }}年的账单</button>
       </div>
     </Teleport>
-    <template v-if="yearGroupList.length>0">
+    <template v-if="yearGroupList.filter(group=>dayjs(group.createAt).year()===year).length>0">
       <div class="item-list top">
         <div class="title">{{ year }}年</div>
         <div class="table">
@@ -104,7 +104,8 @@ console.log(monthGroupList.value);
             <li></li>
           </ul>
           <div class="table-content">
-            <ul class="item" v-for="(group,index) in monthGroupList" :key="index">
+            <ul class="item" v-for="(group,index) in monthGroupList.filter(item=>dayjs(item.createAt).year()===year)"
+                :key="index">
               <li>{{ dayjs(group.createAt).month() + 1 }}月</li>
               <li>-{{ group.expend }}</li>
               <li>+{{ group.income }}</li>
