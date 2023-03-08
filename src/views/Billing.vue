@@ -2,9 +2,9 @@
 import Layout from '@/components/Layout.vue';
 import Icon from '@/components/Icon.vue';
 import {computed, reactive, ref} from 'vue';
-import {useStore} from 'vuex';
-import dayjs, {OpUnitType} from 'dayjs';
+import dayjs from 'dayjs';
 import DetailList from '@/components/Detail-List.vue';
+import filterGroupList from '@/lib/filterGroupList';
 
 const routeInfos = reactive([
   {name: 'information', text: '明细', iconName: 'details'},
@@ -12,43 +12,6 @@ const routeInfos = reactive([
   {name: 'money', text: '记账', iconName: 'money'},
   {name: 'category', text: '类别', iconName: 'category'},
 ]);
-const store = useStore();
-const recordList = computed<RecordItem[]>(() => store.state.recordList);
-const sort = (date: RecordItem[]) => {
-  const newObj = JSON.parse(JSON.stringify(date)) as RecordItem[];
-  return newObj.sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
-};
-const filterGroupList = (data: string) => {
-  if (recordList.value.length === 0) return;
-  let groupList: GroupList[] = [];
-  let newList = sort(recordList.value);
-  if (newList[0].type === '-') {
-    groupList[0] = {createAt: newList[0].createAt, exItems: [newList[0]], inItems: [], sum: 0, expend: 0, income: 0};
-  } else {
-    groupList[0] = {createAt: newList[0].createAt, exItems: [], inItems: [newList[0]], sum: 0, expend: 0, income: 0};
-  }
-  for (let i = 1; i < newList.length; i++) {
-    const current = newList[i];
-    const last = groupList[groupList.length - 1];
-    if (dayjs(current.createAt).isSame(dayjs(last.createAt), `${data}` as OpUnitType)) {
-      current.type === '-' ? last.exItems.push(current) : last.inItems.push(current);
-    } else {
-      if (current.type === '-') {
-        groupList.push({createAt: current.createAt, exItems: [current], inItems: [], sum: 0, expend: 0, income: 0});
-      } else {
-        groupList.push({createAt: current.createAt, exItems: [], inItems: [current], sum: 0, expend: 0, income: 0});
-      }
-    }
-  }
-  groupList.forEach(group => {
-    group.expend = group.exItems.reduce((sum, item) => sum + item.account, 0);
-    group.income = group.inItems.reduce((sum, item) => sum + item.account, 0);
-    group.sum = group.income - group.expend;
-  });
-  return groupList;
-};
-const yearGroupList = computed(() => filterGroupList('year')?.filter(group => dayjs(group.createAt).year() === year.value) || []);
-const monthGroupList = computed(() => filterGroupList('month')?.filter(item => dayjs(item.createAt).year() === year.value) || []);
 const year = ref(dayjs().year());
 const toggleYear = () => {
   const text = window.prompt('请输入查询的年份：');
@@ -57,6 +20,8 @@ const toggleYear = () => {
   if (!/^\d{4}$/.test(text!)) return window.alert('只能输入4个数字');
   year.value = parseInt(text!);
 };
+const yearGroupList = computed(() => filterGroupList('year')?.filter(group => dayjs(group.createAt).year() === year.value) || []);
+const monthGroupList = computed(() => filterGroupList('month')?.filter(item => dayjs(item.createAt).year() === year.value) || []);
 const sum = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.sum!, 0));
 const expend = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.expend!, 0));
 const income = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.income!, 0));

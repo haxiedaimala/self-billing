@@ -1,5 +1,5 @@
 import {createStore} from 'vuex';
-import createId from '@/createId';
+import createId from '@/lib/createId';
 
 type CategoryItem = { id?: number; category: string, iconName: string, isShow?: boolean, type: string, created?: boolean }
 const store = createStore({
