@@ -17,9 +17,9 @@ interface RecordItem {
 
 interface GroupList {
   createAt: string,
-  expend?: number,
-  income?: number,
-  sum?: number,
+  expend: number,
+  income: number,
+  sum: number,
   exItems: RecordItem[],
   inItems: RecordItem[]
 }

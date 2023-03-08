@@ -2,11 +2,9 @@
 import Layout from '@/components/Layout.vue';
 import Icon from '@/components/Icon.vue';
 import {computed, reactive, ref} from 'vue';
-import {useRouter} from 'vue-router';
 import {useStore} from 'vuex';
 import dayjs, {OpUnitType} from 'dayjs';
 
-const router = useRouter();
 const routeInfos = reactive([
   {name: 'information', text: '明细', iconName: 'details'},
   {name: 'billing', text: '账单', iconName: 'billing'},
@@ -24,9 +22,9 @@ const filterGroupList = (data: string) => {
   let groupList: GroupList[] = [];
   let newList = sort(recordList.value);
   if (newList[0].type === '-') {
-    groupList[0] = {createAt: newList[0].createAt, exItems: [newList[0]], inItems: []};
+    groupList[0] = {createAt: newList[0].createAt, exItems: [newList[0]], inItems: [], sum: 0, expend: 0, income: 0};
   } else {
-    groupList[0] = {createAt: newList[0].createAt, exItems: [], inItems: [newList[0]]};
+    groupList[0] = {createAt: newList[0].createAt, exItems: [], inItems: [newList[0]], sum: 0, expend: 0, income: 0};
   }
   for (let i = 1; i < newList.length; i++) {
     const current = newList[i];
@@ -35,9 +33,9 @@ const filterGroupList = (data: string) => {
       current.type === '-' ? last.exItems.push(current) : last.inItems.push(current);
     } else {
       if (current.type === '-') {
-        groupList.push({createAt: current.createAt, exItems: [current], inItems: []});
+        groupList.push({createAt: current.createAt, exItems: [current], inItems: [], sum: 0, expend: 0, income: 0});
       } else {
-        groupList.push({createAt: current.createAt, exItems: [], inItems: [current]});
+        groupList.push({createAt: current.createAt, exItems: [], inItems: [current], sum: 0, expend: 0, income: 0});
       }
     }
   }
@@ -48,32 +46,48 @@ const filterGroupList = (data: string) => {
   });
   return groupList;
 };
-const yearGroupList = computed(() => filterGroupList('year') || []);
-const monthGroupList = computed(() => filterGroupList('month') || []);
-const goBack = () => router.back();
+const yearGroupList = computed(() => filterGroupList('year')?.filter(group => dayjs(group.createAt).year() === year.value) || []);
+const monthGroupList = computed(() => filterGroupList('month')?.filter(item => dayjs(item.createAt).year() === year.value) || []);
 const year = ref(dayjs().year());
 const toggleYear = () => {
   const text = window.prompt('请输入查询的年份：');
-  if (text === 'null') return;
   if (text === '') return window.alert('年份不能为空');
+  if (text === null) return;
   if (!/^\d{4}$/.test(text!)) return window.alert('只能输入4个数字');
   year.value = parseInt(text!);
 };
 const sum = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.sum!, 0));
 const expend = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.expend!, 0));
 const income = computed(() => yearGroupList.value.reduce((sum, item) => sum + item.income!, 0));
-console.log(yearGroupList.value);
+const showMonthList = computed(() => {
+  let arr = [];
+  const showFirstMonth = dayjs(monthGroupList.value[0].createAt).month() + 1;
+  const findMonthDate = (i: number) => {
+    return monthGroupList.value.filter(item => dayjs(item.createAt).month() === i).length === 0
+        ? ''
+        : monthGroupList.value.filter(item => dayjs(item.createAt).month() === i)[0];
+  };
+  for (let i = 0; i < showFirstMonth; i++) {
+    arr.push({
+      month: i + 1,
+      expend: findMonthDate(i) === '' ? '0' : (findMonthDate(i) as GroupList).expend,
+      income: findMonthDate(i) === '' ? '0' : (findMonthDate(i) as GroupList).income,
+      sum: findMonthDate(i) === '' ? '0' : (findMonthDate(i) as GroupList).sum
+    });
+  }
+  arr.sort((b, a) => a.month - b.month);
+  return arr;
+});
 </script>
 
 <template>
   <Layout :routes="routeInfos">
     <Teleport to="body">
       <div class="nav">
-        <Icon name="left" class="left" @click="goBack"/>
         <button class="year" @click="toggleYear">{{ year }}年的账单</button>
       </div>
     </Teleport>
-    <template v-if="yearGroupList.filter(group=>dayjs(group.createAt).year()===year).length>0">
+    <template v-if="yearGroupList.length>0">
       <div class="item-list top">
         <div class="title">{{ year }}年</div>
         <div class="table">
@@ -104,12 +118,11 @@ console.log(yearGroupList.value);
             <li></li>
           </ul>
           <div class="table-content">
-            <ul class="item" v-for="(group,index) in monthGroupList.filter(item=>dayjs(item.createAt).year()===year)"
-                :key="index">
-              <li>{{ dayjs(group.createAt).month() + 1 }}月</li>
-              <li>-{{ group.expend }}</li>
-              <li>+{{ group.income }}</li>
-              <li>{{ group.sum }}</li>
+            <ul class="item" v-for="item in showMonthList" :key="item.month">
+              <li>{{ item.month }}月</li>
+              <li>-{{ item.expend }}</li>
+              <li>+{{ item.income }}</li>
+              <li>{{ item.sum }}</li>
               <li>
                 <Icon name="left"/>
               </li>
@@ -143,11 +156,6 @@ console.log(yearGroupList.value);
     margin-left: auto;
     border: none;
     background-color: transparent;
-  }
-
-  .left {
-    width: 1.5em;
-    height: 1.5em;
   }
 }
 
