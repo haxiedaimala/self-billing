@@ -2,10 +2,12 @@
 import Icon from '@/components/Icon.vue';
 import TopNav from '@/components/TopNav.vue';
 import {ref} from 'vue';
-import store from '@/store';
 import {useRoute, useRouter} from 'vue-router';
 import getIconName from '@/lib/getIconName';
+import {createCategoryError} from '@/lib/storeErrorInfo';
+import {useStore} from 'vuex';
 
+const store = useStore();
 const route = useRoute();
 const router = useRouter();
 const svgIcon = getIconName;
@@ -20,12 +22,16 @@ const save = () => {
   if (category?.length === 0) return window.alert('类别名称不为空');
   let obj = {category: category, iconName: selectedIcon.value, type: type.value};
   store.commit('createCategory', obj);
-  router.push({
-    name: 'category',
-    query: {
-      type: type.value
-    }
-  });
+  const msg = store.state.createCategoryError;
+  window.alert(createCategoryError[msg]);
+  if (msg === null) {
+    router.push({
+      name: 'category',
+      query: {
+        type: type.value
+      }
+    });
+  }
 };
 </script>
 

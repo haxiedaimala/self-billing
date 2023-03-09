@@ -4,6 +4,7 @@ import CategoryItem from '@/components/CategoryItem.vue';
 import NumberPanel from '@/components/NumberPanel.vue';
 import {computed, ref} from 'vue';
 import {useStore} from 'vuex';
+import {createRecordError} from '@/lib/storeErrorInfo';
 
 const type = ref('-');
 const store = useStore();
@@ -20,6 +21,7 @@ const submitRecord = (value: { note: string, account: number, createAt: string }
   if (selectCategory.value === undefined) return window.alert('请选择标签');
   Object.assign(value, {category: selectCategory.value.category, type: type.value});
   store.commit('createRecord', value);
+  window.alert(createRecordError[store.state.createRecordError]);
 };
 </script>
 

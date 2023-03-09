@@ -5,7 +5,10 @@ type CategoryItem = { id?: number; category: string, iconName: string, isShow?: 
 const store = createStore({
   state: {
     categoryList: [] as Category[],
-    recordList: [] as RecordItem[]
+    recordList: [] as RecordItem[],
+    createRecordError: null as Error | null,
+    createCategoryError: null as Error | null,
+    updateCategoryError: null as Error | null,
   },
   getters: {},
   mutations: {
@@ -15,7 +18,7 @@ const store = createStore({
     createRecord(state, obj: RecordItem) {
       state.recordList.push(obj);
       store.commit('saveRecord');
-      window.alert('记账成功');
+      state.createRecordError = null;
     },
     saveRecord(state) {
       localStorage.setItem('recordList', JSON.stringify(state.recordList));
@@ -31,23 +34,23 @@ const store = createStore({
     createCategory(state, obj: CategoryItem) {
       const names = state.categoryList.map(item => item.category);
       if (names.indexOf(obj.category) >= 0) {
-        window.alert('标签名已存在');
+        state.createCategoryError = new Error('category name is duplicated');
       } else {
         if ('id' in obj) {
-          window.alert('重复创建');
+          state.createCategoryError = new Error('category id is duplicated');
         } else {
           obj.isShow = true;
           obj.created = true;
           state.categoryList.push(Object.assign({}, {id: createId()}, obj) as Category);
           store.commit('saveCategory');
-          window.alert('创建成功');
+          state.createCategoryError = null;
         }
       }
     },
     updateCategory(state, obj: Category) {
       const xxx = state.categoryList.filter(item => item.id === obj.id);
       if (xxx.length === 0) {
-        window.alert('找不到该标签信息');
+        state.updateCategoryError=new Error('category is nut found')
       } else {
         for (let i = 0; i < state.categoryList.length; i++) {
           if (state.categoryList[i].id === obj.id) {
@@ -56,7 +59,7 @@ const store = createStore({
         }
         console.log(state.categoryList);
         store.commit('saveCategory');
-        alert('更新成功');
+        state.updateCategoryError=null
       }
     },
     saveCategory(state) {

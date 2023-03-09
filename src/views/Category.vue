@@ -4,6 +4,7 @@ import {computed, ref} from 'vue';
 import TopNav from '@/components/TopNav.vue';
 import {useStore} from 'vuex';
 import {useRoute} from 'vue-router';
+import {updateCategoryError} from '@/lib/storeErrorInfo';
 
 const store = useStore();
 const route = useRoute();
@@ -14,6 +15,7 @@ const unShowCategory = computed(() => categoryList.value.filter(item => !item.is
 const toggleIsShow = (value: Category) => {
   value.isShow = !value.isShow;
   store.commit('updateCategory', value);
+  window.alert(updateCategoryError[store.state.updateCategoryError])
 };
 </script>
 
