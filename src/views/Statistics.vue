@@ -2,11 +2,12 @@
 import Icon from '@/components/Icon.vue';
 import DetailList from '@/components/Detail-List.vue';
 import {useRouter} from 'vue-router';
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import dayjs from 'dayjs';
 import {detailInput} from '@/lib/detailInput';
 import {useStore} from 'vuex';
-import Chart from '@/components/ChartPie.vue';
+import ChartPie from '@/components/ChartPie.vue';
+import ChartLine from '@/components/ChartLine.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -53,12 +54,46 @@ const categorySortList = computed(() => {
   return obj.sort((b, a) => a.sum - b.sum);
 });
 const typeTitle = computed(() => type.value === '-' ? '支出' : '收入');
-const xxx = computed(() => {
-  const newList: { name: string, value: number }[] = [];
+const dataListPie = computed(() => {
+  const newList: { value: number, name: string }[] = [];
   categorySortList.value.forEach(item => {
     newList.push({value: item.sum, name: item.category});
   });
   return newList;
+});
+const dataListLine = computed(() => {
+  const newData: { key: string, value: number }[] = [];
+  const list = type.value === '-' ? monthGroupList.value[0].exItems : monthGroupList.value[0].inItems;
+  const lastDay = dayjs().endOf('month').format('YYYY-MM-DD');
+  const daysInMonth = dayjs().daysInMonth();
+  for (let i = 0; i < daysInMonth; i++) {
+    const key = dayjs(lastDay).subtract(i, 'day').format('YYYY-MM-DD');
+    const value = list.filter(item => dayjs(item.createAt).isSame(key, 'day'))[0]?.account || 0.00;
+    newData.push({key: key, value: value});
+  }
+  return newData.sort((a, b) => dayjs(a.key).valueOf() - dayjs(b.key).valueOf());
+});
+const chartWrapper = ref<HTMLDivElement>();
+onMounted(() => {
+  const index = parseInt(dayjs().format('D'));
+  if (index <= 7) {
+    chartWrapper.value!.scrollLeft = chartWrapper.value!.scrollWidth / 31 * (index - 2);
+  } else {
+    chartWrapper.value!.scrollLeft = chartWrapper.value!.scrollWidth / 31 * (index - 4);
+  }
+});
+const maxAccountInfo = computed(() => {
+  let days = parseInt(dayjs().endOf('month').format('D'));
+  let maxAccount = accountSortList.value[0].account;
+  let maxDate = dayjs(accountSortList.value[0].createAt).format('MM.DD');
+  let sum = accountSortList.value.reduce((sum, item) => sum + item.account, 0);
+  let length = accountSortList.value.length;
+  return {
+    maxAccount: maxAccount,
+    maxDate: maxDate,
+    mean: Math.floor(sum / days * 100) / 100,
+    length: length
+  };
 });
 </script>
 
@@ -88,13 +123,32 @@ const xxx = computed(() => {
       <div class="statistics">
         <div class="item">
           <div class="title">{{ typeTitle }}趋势概况</div>
-          <div class="chart">1</div>
+          <div class="chart-details">
+            <div>
+              <span class="chart-title">本月内单日最高{{ typeTitle }}</span>
+              <span>
+                在 <span class="chart-data">{{ maxAccountInfo.maxDate }}</span> 这一天中，你{{ typeTitle }}了
+                <span class="chart-data">￥{{ maxAccountInfo.maxAccount }}</span>
+              </span>
+            </div>
+            <div class="chart-statistic">
+              <div>
+                <span class="chart-title">本月内平均每日{{ typeTitle }}</span>
+                <span>￥{{ maxAccountInfo.mean }}</span>
+              </div>
+              <div>
+                <span class="chart-title">本月内累计支出笔数</span>
+                <span>{{ maxAccountInfo.length }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrapper" ref="chartWrapper">
+            <ChartLine class="chart chart-line" :data="dataListLine"/>
+          </div>
         </div>
         <div class="item">
           <div class="title">{{ typeTitle }}占比概况</div>
-          <div class="chart">
-            <Chart :data="xxx"/>
-          </div>
+          <ChartPie class="chart" :data="dataListPie"/>
         </div>
         <div class="item">
           <div class="title">{{ typeTitle }}类目排行</div>
@@ -214,9 +268,44 @@ const xxx = computed(() => {
       border-bottom: 2px solid var(--color-border);
     }
 
+    .chart-details {
+      div {
+        margin-top: 0.4em;
+        display: flex;
+        flex-direction: column;
+
+        .chart-title {
+          font-size: 14px;
+          color: var(--color-unselected);
+        }
+
+        .chart-data {
+          color: var(--color-selected);
+        }
+
+        &.chart-statistic {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+    }
+
+    .chart-wrapper {
+      overflow: auto;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
     .chart {
       margin: 0.8em 0 0.4em;
       height: 10em;
+
+      &.chart-line {
+        width: 420%
+      }
     }
 
     .content {

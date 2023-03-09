@@ -3,7 +3,7 @@ import * as echarts from 'echarts';
 import {ref, watchPostEffect} from 'vue';
 
 const props = defineProps<{
-  data: { value: number, name: string, }
+  data: { value: number, name: string}[]
 }>();
 let chartDom = ref<HTMLDivElement>();
 
