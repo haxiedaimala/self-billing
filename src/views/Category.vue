@@ -18,7 +18,7 @@ const toggleIsShow = (value: Category) => {
 </script>
 
 <template>
-  <TopNav v-model="type">目前共{{ isShowCategory.length }}个类别</TopNav>
+  <TopNav to-page="money" v-model="type">目前共{{ isShowCategory.length }}个类别</TopNav>
 
   <ul class="item item-first">
     <li v-for="item in isShowCategory" :key="item.category">

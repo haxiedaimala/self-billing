@@ -18,7 +18,7 @@ const toggle = (value: string) => {
   }
   emits('update:modelValue', value);
 };
-const goBack = () => router.back();
+const goBack = () => router.push({name: 'billing'});
 </script>
 
 <template>

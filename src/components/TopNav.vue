@@ -2,14 +2,23 @@
 import {useRouter} from 'vue-router';
 import Icon from '@/components/Icon.vue';
 
-defineProps<{
-  modelValue: '-' | '+'
+const props = defineProps<{
+  modelValue: '-' | '+',
+  toPage?: string
 }>();
 const emits = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>();
 const router = useRouter();
-const goBack = () => router.back();
+const goBack = () => {
+  if (props.toPage === undefined) {
+    router.back();
+  } else {
+    router.push({
+      name: props.toPage
+    });
+  }
+};
 const toggle = (value: string) => emits('update:modelValue', value);
 </script>
 

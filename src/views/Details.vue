@@ -4,14 +4,17 @@ import DetailList from '@/components/Detail-List.vue';
 import filterGroupList from '@/lib/filterGroupList';
 import {computed, ref} from 'vue';
 import dayjs from 'dayjs';
-import {useRouter} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import {useStore} from 'vuex';
 import {detailInput} from '@/lib/detailInput';
 
+const route = useRoute();
 const store = useStore();
 const router = useRouter();
-const year = ref(dayjs().year());
-const month = ref(dayjs().month() + 1);
+const routeYear = route.query.year as string;
+const routeMonth = route.query.month as string;
+const year = ref(parseInt(routeYear)||dayjs().year());
+const month = ref(parseInt(routeMonth) || dayjs().month() + 1);
 const {toggleMonth, toggleYear, monthSum, monthExpend, monthIncome} = detailInput(year, month);
 const goBack = () => router.push({name: 'billing'});
 const categoryList = computed<Category[]>(() => store.state.categoryList);
@@ -33,7 +36,6 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
 </script>
 
 <template>
-
   <Teleport to="body">
     <div class="nav">
       <Icon name="left" @click="goBack"/>

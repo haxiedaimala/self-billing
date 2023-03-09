@@ -5,7 +5,9 @@ import {computed, reactive, ref} from 'vue';
 import dayjs from 'dayjs';
 import DetailList from '@/components/Detail-List.vue';
 import filterGroupList from '@/lib/filterGroupList';
+import {useRouter} from 'vue-router';
 
+const router = useRouter();
 const routeInfos = reactive([
   {name: 'information', text: '明细', iconName: 'details'},
   {name: 'billing', text: '账单', iconName: 'billing'},
@@ -44,6 +46,15 @@ const showMonthList = computed(() => {
   arr.sort((b, a) => a.month - b.month);
   return arr;
 });
+const goDetail = (value: number) => {
+  router.push({
+    name: 'details',
+    query: {
+      year: year.value,
+      month: value
+    }
+  });
+};
 </script>
 
 <template>
@@ -72,7 +83,7 @@ const showMonthList = computed(() => {
               <li>+{{ item.income }}</li>
               <li>{{ item.sum }}</li>
               <li>
-                <Icon name="left"/>
+                <Icon name="left" @click="goDetail(item.month)"/>
               </li>
             </ul>
           </div>
