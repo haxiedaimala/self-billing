@@ -83,7 +83,7 @@ const goDetail = (value: number) => {
               <li>+{{ item.income }}</li>
               <li>{{ item.sum }}</li>
               <li>
-                <Icon name="left" @click="goDetail(item.month)"/>
+                <Icon name="right" @click="goDetail(item.month)"/>
               </li>
             </ul>
           </div>

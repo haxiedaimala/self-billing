@@ -4,13 +4,14 @@ import TopNav from '@/components/TopNav.vue';
 import {ref} from 'vue';
 import store from '@/store';
 import {useRoute, useRouter} from 'vue-router';
+import getIconName from '@/lib/getIconName';
 
 const route = useRoute();
 const router = useRouter();
-const svgIcon = ['car', 'shopping', 'phone', 'add', 'pen', 'menu'];
+const svgIcon = getIconName;
 const type = ref(route.query.type || '-');
 const inputItem = ref<HTMLInputElement>();
-const selectedIcon = ref(svgIcon[1]);
+const selectedIcon = ref(svgIcon[0]);
 const toggle = (value: string) => {
   selectedIcon.value = value;
 };
