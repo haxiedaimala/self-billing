@@ -8,6 +8,7 @@ import {detailInput} from '@/lib/detailInput';
 import {useStore} from 'vuex';
 import ChartPie from '@/components/ChartPie.vue';
 import ChartLine from '@/components/ChartLine.vue';
+import UnShow from '@/components/UnShow.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -76,6 +77,7 @@ const dataListLine = computed(() => {
 const chartWrapper = ref<HTMLDivElement>();
 onMounted(() => {
   const index = parseInt(dayjs().format('D'));
+  if (chartWrapper.value === undefined) return;
   if (index <= 7) {
     chartWrapper.value!.scrollLeft = chartWrapper.value!.scrollWidth / 31 * (index - 2);
   } else {
@@ -195,6 +197,12 @@ const maxAccountInfo = computed(() => {
         </div>
       </div>
     </template>
+    <template v-else>
+      <UnShow/>
+    </template>
+  </template>
+  <template v-else>
+    <UnShow/>
   </template>
 </template>
 

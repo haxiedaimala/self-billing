@@ -25,10 +25,32 @@ const store = createStore({
     },
     fetCategoryList(state) {
       state.categoryList = JSON.parse(localStorage.getItem('categoryList') || '[]');
+
       if (state.categoryList.length === 0) {
-        store.commit('createCategory', {category: '餐饮', iconName: 'food', isShow: true, type: '-', created: false});
-        store.commit('createCategory', {category: '交通', iconName: 'car', isShow: true, type: '-', created: false});
-        store.commit('createCategory', {category: '购物', iconName: 'food', isShow: true, type: '-', created: false});
+        const dataSourceList = [
+          {category: '餐饮', iconName: 'food', type: '-'},
+          {category: '游戏', iconName: 'games', type: '-'},
+          {category: '运动', iconName: 'sport', type: '-'},
+          {category: '购物', iconName: 'shopping', type: '-'},
+          {category: '其他', iconName: 'others', type: '-'},
+          {category: '化妆', iconName: 'lipstick', type: '-'},
+          {category: '服饰', iconName: 'cloth', type: '-'},
+          {category: '交通', iconName: 'subway', type: '-'},
+          {category: '工资', iconName: 'borrowMoney', type: '+'},
+          {category: '存款', iconName: 'moneyBox', type: '+'},
+          {category: '投资', iconName: 'stock', type: '+'},
+          {category: '其他', iconName: 'others', type: '+'},
+          {category: '红包', iconName: 'redPacket', type: '+'},
+        ];
+        for (let i = 0; i < dataSourceList.length; i++) {
+          store.commit('createCategory', {
+            category: dataSourceList[i].category,
+            iconName: dataSourceList[i].iconName,
+            isShow: true,
+            type: dataSourceList[i].type,
+            created: false
+          });
+        }
       }
     },
     createCategory(state, obj: CategoryItem) {
@@ -50,7 +72,7 @@ const store = createStore({
     updateCategory(state, obj: Category) {
       const xxx = state.categoryList.filter(item => item.id === obj.id);
       if (xxx.length === 0) {
-        state.updateCategoryError=new Error('category is nut found')
+        state.updateCategoryError = new Error('category is nut found');
       } else {
         for (let i = 0; i < state.categoryList.length; i++) {
           if (state.categoryList[i].id === obj.id) {
@@ -59,7 +81,7 @@ const store = createStore({
         }
         console.log(state.categoryList);
         store.commit('saveCategory');
-        state.updateCategoryError=null
+        state.updateCategoryError = null;
       }
     },
     saveCategory(state) {
