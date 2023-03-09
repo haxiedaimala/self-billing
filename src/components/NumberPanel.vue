@@ -156,8 +156,8 @@ const ok = () => {
       font-size: 24px;
       font-family: Consolas, monospace;
     }
-
     &.date {
+      width: 100%;
       display: flex;
       margin-top: 8px;
       padding: 0.4em 1em;
