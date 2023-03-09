@@ -2,10 +2,12 @@
 import Icon from '@/components/Icon.vue';
 import DetailList from '@/components/Detail-List.vue';
 import {useRouter} from 'vue-router';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import dayjs from 'dayjs';
 import {detailInput} from '@/lib/detailInput';
+import {useStore} from 'vuex';
 
+const store = useStore();
 const router = useRouter();
 const year = ref(dayjs().year());
 const month = ref(dayjs().month() + 1);
@@ -13,7 +15,43 @@ const type = ref('-');
 const {monthGroupList, toggleMonth, toggleYear, monthSum, monthExpend, monthIncome} = detailInput(year, month);
 const goBack = () => router.push({name: 'billing'});
 const toggleType = (value: string) => type.value = value;
-console.log(monthGroupList.value);
+const accountSortList = computed(() => {
+  let arr: RecordItem[] = [];
+  monthGroupList.value.forEach(group => {
+    arr.push(...group.inItems);
+    arr.push(...group.exItems);
+  });
+  arr = arr.sort((b, a) => a.account - b.account);
+  return arr.filter(item => item.type === type.value);
+});
+const selectIcon = computed(() => (value: string) => {
+  const categoryList = computed<Category[]>(() => store.state.categoryList);
+  return categoryList.value.filter(item => item.category === value)[0].iconName;
+});
+const categorySortList = computed(() => {
+  let arr: RecordItem[] = [];
+  let obj: { category: string, sum: number, items: RecordItem[] }[] = [];
+  monthGroupList.value.forEach(group => {
+    Object.assign(arr, group.exItems, group.inItems);
+  });
+  arr = arr.filter(item => item.type === type.value);
+  if (arr.length === 0) return [];
+  obj[0] = {category: arr[0].category, sum: 0, items: [arr[0]]};
+  for (let i = 1; i < arr.length; i++) {
+    const last = obj[obj.length - 1];
+    const current = arr[i];
+    if (current.category === last.category) {
+      last.items.push(current);
+    } else {
+      obj.push({category: current.category, sum: 0, items: [current]});
+    }
+  }
+  obj.forEach(group => {
+    group.sum = group.items.reduce((sum, item) => sum + item.account, 0);
+  });
+  return obj.sort((b, a) => a.sum - b.sum);
+});
+const typeTitle = computed(() => type.value === '-' ? '支出' : '收入');
 </script>
 
 <template>
@@ -38,77 +76,61 @@ console.log(monthGroupList.value);
         <li :class="{selected:type==='+'}" @click="toggleType('+')">收入</li>
       </ul>
     </DetailList>
-    <div class="statistics">
-      <div class="item">
-        <div class="title">支出趋势概况</div>
-        <div class="chart">1</div>
-      </div>
-      <div class="item">
-        <div class="title">支出占比概况</div>
-        <div class="chart">1</div>
-      </div>
-
-      <div class="item">
-        <div class="title">支出类目排行</div>
-        <div class="content">
-          <div class="content-item">
-            <div class="iconItem">
-              <Icon name="food"/>
-            </div>
-            <div class="info">
-              <div class="info-item">
-                <span class="category-title">运动</span>
-                <span>共消费2笔</span>
+    <template v-if="accountSortList.length>0">
+      <div class="statistics">
+        <div class="item">
+          <div class="title">{{ typeTitle }}趋势概况</div>
+          <div class="chart">1</div>
+        </div>
+        <div class="item">
+          <div class="title">{{ typeTitle }}占比概况</div>
+          <div class="chart">1</div>
+        </div>
+        <div class="item">
+          <div class="title">{{ typeTitle }}类目排行</div>
+          <div class="content">
+            <div class="content-item"
+                 v-for="group in categorySortList" :key="group.category">
+              <div class="iconItem">
+                <Icon :name="selectIcon(group.category)"/>
               </div>
-              <div class="info-item">本月共支出：￥2222</div>
+              <div class="info">
+                <div class="info-item">
+                  <span class="category-title">{{ group.category }}</span>
+                  <span>共消费{{ group.items.length }}笔</span>
+                </div>
+                <div class="info-item">
+                  本月共{{ typeTitle }}：￥{{ group.sum }}
+                </div>
+              </div>
             </div>
           </div>
-          <div class="content-item">
-            <div class="iconItem">
-              <Icon name="food"/>
-            </div>
-            <div class="info">
-              <div class="info-item">
-                <span class="category-title">运动</span>
-                <span>共消费2笔</span>
+        </div>
+        <div class="item">
+          <div class="title">{{ typeTitle }}明细排行</div>
+          <div class="content">
+            <div class="content-item"
+                 v-for="item in accountSortList"
+                 :key="item.category"
+            >
+              <div class="iconItem">
+                <Icon :name="selectIcon(item.category)"/>
               </div>
-              <div class="info-item">本月共支出：￥2222</div>
+              <div class="info">
+                <div class="info-item">
+                  <span class="category-title">{{ item.category }}</span>
+                  <span class="detailAccount">
+                  <span v-if="type==='-'">-</span>
+                  ￥{{ item.account }}
+                </span>
+                </div>
+                <div class="info-item">{{ dayjs(item.createAt).format('MM.DD') }}</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="item">
-        <div class="title">支出明细排行</div>
-        <div class="content">
-          <div class="content-item">
-            <div class="iconItem">
-              <Icon name="food"/>
-            </div>
-            <div class="info">
-              <div class="info-item">
-                <span class="category-title">运动</span>
-                <span class="detailAccount">-￥2255</span>
-              </div>
-              <div class="info-item">03.07</div>
-            </div>
-          </div>
-          <div class="content-item">
-            <div class="iconItem">
-              <Icon name="food"/>
-            </div>
-            <div class="info">
-              <div class="info-item">
-                <span class="category-title">运动</span>
-                <span class="detailAccount">-￥2255</span>
-              </div>
-              <div class="info-item">03.07</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    </template>
   </template>
 </template>
 
@@ -197,6 +219,9 @@ console.log(monthGroupList.value);
         margin: 1em 0;
 
         .iconItem {
+          display: flex;
+          justify-content: center;
+          align-items: center;
           padding: 0.4em;
           margin-right: 0.8em;
           border-radius: 50%;
