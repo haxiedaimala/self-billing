@@ -6,6 +6,7 @@ import {computed, ref} from 'vue';
 import dayjs from 'dayjs';
 import {detailInput} from '@/lib/detailInput';
 import {useStore} from 'vuex';
+import Chart from '@/components/ChartPie.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -52,6 +53,13 @@ const categorySortList = computed(() => {
   return obj.sort((b, a) => a.sum - b.sum);
 });
 const typeTitle = computed(() => type.value === '-' ? '支出' : '收入');
+const xxx = computed(() => {
+  const newList: { name: string, value: number }[] = [];
+  categorySortList.value.forEach(item => {
+    newList.push({value: item.sum, name: item.category});
+  });
+  return newList;
+});
 </script>
 
 <template>
@@ -84,7 +92,9 @@ const typeTitle = computed(() => type.value === '-' ? '支出' : '收入');
         </div>
         <div class="item">
           <div class="title">{{ typeTitle }}占比概况</div>
-          <div class="chart">1</div>
+          <div class="chart">
+            <Chart :data="xxx"/>
+          </div>
         </div>
         <div class="item">
           <div class="title">{{ typeTitle }}类目排行</div>
@@ -205,8 +215,8 @@ const typeTitle = computed(() => type.value === '-' ? '支出' : '收入');
     }
 
     .chart {
-      padding: 0.4em 0;
-      min-height: 10em;
+      margin: 0.8em 0 0.4em;
+      height: 10em;
     }
 
     .content {
