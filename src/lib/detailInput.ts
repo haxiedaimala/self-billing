@@ -1,21 +1,30 @@
 import filterGroupList from '@/lib/filterGroupList';
+import openDialog from '@/lib/openDialog';
 import {computed, Ref} from 'vue';
 import dayjs from 'dayjs';
+import openMessage from '@/lib/openMessage';
 
 export function detailInput(year: Ref<number>, month: Ref<number>) {
   const toggleMonth = () => {
-    const text = window.prompt('请输入查询的月份：');
-    if (text === '') return window.alert('月份不能为空');
-    if (text === null) return;
-    if (!/^\d{2}$/.test(text!) && !/^\d$/.test(text!) || parseInt(text) > 12) return window.alert('只能输入1-12的数字');
-    month.value = parseInt(text!);
+    const ok = (text: string) => {
+      if (text === '') return openMessage({message: '月份不能为空', type: 'error'});
+      if (text === null) return;
+      if (!/^\d{2}$/.test(text!) && !/^\d$/.test(text!) || parseInt(text) > 12) return openMessage({
+        message: '只能输入1-12的数字',
+        type: 'error'
+      });
+      month.value = parseInt(text!);
+    };
+    openDialog({ok: ok, header: '请输入查询的月份：'});
   };
   const toggleYear = () => {
-    const text = window.prompt('请输入查询的年份：');
-    if (text === '') return window.alert('年份不能为空');
-    if (text === null) return;
-    if (!/^\d{4}$/.test(text!)) return window.alert('只能输入4个数字');
-    year.value = parseInt(text!);
+    const ok = (text: string) => {
+      if (text === '') return openMessage({message: '年份不能为空', type: 'error'});
+      if (text === null) return;
+      if (!/^\d{4}$/.test(text!)) return openMessage({message: '只能输入4个数字', type: 'error'});
+      month.value = parseInt(text!);
+    };
+    openDialog({ok: ok, header: '请输入查询的年份：'});
   };
   const monthGroupList = computed(() => filterGroupList('month')?.filter(item => dayjs(item.createAt).year() === year.value && dayjs(item.createAt).month() === month.value - 1) || []);
   const monthSum = computed(() => {

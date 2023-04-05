@@ -5,6 +5,7 @@ import NumberPanel from '@/components/NumberPanel.vue';
 import {computed, ref} from 'vue';
 import {useStore} from 'vuex';
 import {createRecordError} from '@/lib/storeErrorInfo';
+import openMessage from '@/lib/openMessage';
 
 const type = ref('-');
 const store = useStore();
@@ -18,18 +19,19 @@ const account = ref('0.00');
 const date = ref(new Date().toISOString());
 
 const submitRecord = (value: { note: string, account: number, createAt: string }) => {
-  if (selectCategory.value === undefined) return window.alert('请选择标签');
+  if (selectCategory.value === undefined) return openMessage({message: '请选择标签', type: 'error'});
   Object.assign(value, {category: selectCategory.value.category, type: type.value});
   store.commit('createRecord', value);
-  window.alert(createRecordError[store.state.createRecordError]);
+  openMessage({message: createRecordError[store.state.createRecordError]});
 };
 </script>
 
 <template>
   <div class="wrapper">
+    {{ selectCategory }}
     <Types v-model="type"/>
     <CategoryItem :type="type" v-model="dateSource" v-model:selected="selectCategory"/>
-    <NumberPanel :note="note" :output="account" :date="date" @submit="submitRecord"/>
+    <NumberPanel :note="note" :account="account" :date="date" @submit="submitRecord"/>
   </div>
 </template>
 

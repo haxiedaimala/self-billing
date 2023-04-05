@@ -7,6 +7,8 @@ import DetailList from '@/components/Detail-List.vue';
 import filterGroupList from '@/lib/filterGroupList';
 import {useRouter} from 'vue-router';
 import UnShow from '@/components/UnShow.vue';
+import openDialog from '@/lib/openDialog';
+import openMessage from '@/lib/openMessage';
 
 const router = useRouter();
 const routeInfos = reactive([
@@ -17,11 +19,15 @@ const routeInfos = reactive([
 ]);
 const year = ref(dayjs().year());
 const toggleYear = () => {
-  const text = window.prompt('请输入查询的年份：');
-  if (text === '') return window.alert('年份不能为空');
-  if (text === null) return;
-  if (!/^\d{4}$/.test(text!)) return window.alert('只能输入4个数字');
-  year.value = parseInt(text!);
+  openDialog({
+    ok: (text: string) => {
+      if (text === '') return openMessage({message: '年份不能为空', type: 'error'});
+      if (text === null) return;
+      if (!/^\d{4}$/.test(text!)) return openMessage({message: '只能输入4个数字', type: 'error'});
+      year.value = parseInt(text!);
+    },
+    header: '请输入查询的年份：'
+  });
 };
 const yearGroupList = computed(() => filterGroupList('year')?.filter(group => dayjs(group.createAt).year() === year.value) || []);
 const monthGroupList = computed(() => filterGroupList('month')?.filter(item => dayjs(item.createAt).year() === year.value) || []);
@@ -62,7 +68,7 @@ const goDetail = (value: number) => {
   <Layout :routes="routeInfos">
     <Teleport to="body">
       <div class="nav">
-        <button class="year" @click="toggleYear">{{ year }}年的账单</button>
+        <button class="year-wrapper" @click="toggleYear"><span class="year">{{ year }}</span>年的账单</button>
       </div>
     </Teleport>
     <template v-if="yearGroupList.length>0">
@@ -98,6 +104,8 @@ const goDetail = (value: number) => {
 </template>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/helper.scss";
+
 .nav {
   display: flex;
   align-items: center;
@@ -108,13 +116,18 @@ const goDetail = (value: number) => {
   right: 0;
   top: 0;
 
-  .year {
+  .year-wrapper {
     font-size: 20px;
     margin-left: auto;
     border: none;
     background-color: transparent;
+
+    .year {
+      @extend %selectedItem;
+    }
   }
 }
+
 
 .list-top {
   margin-top: 75px;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import dayjs from 'dayjs';
+import openMessage from '@/lib/openMessage';
 
 const props = defineProps({
   note: {
@@ -85,7 +86,10 @@ const ok = () => {
     }
   }
   output.value = parseFloat(output.value).toString();
-  if (parseFloat(output.value) < 0 || output.value === '0.00' || output.value === '0') return window.alert('金额需大于0');
+  if (parseFloat(output.value) < 0 || output.value === '0.00' || output.value === '0') return openMessage({
+    message: '金额需大于0',
+    type: 'error'
+  });
   emit('submit', {note: notes.value, account: parseFloat(output.value), createAt: dateTime.value});
   toStart();
 };
@@ -156,6 +160,7 @@ const ok = () => {
       font-size: 24px;
       font-family: Consolas, monospace;
     }
+
     &.date {
       width: 100%;
       display: flex;

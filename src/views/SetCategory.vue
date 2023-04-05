@@ -6,6 +6,7 @@ import {useRoute, useRouter} from 'vue-router';
 import getIconName from '@/lib/getIconName';
 import {createCategoryError} from '@/lib/storeErrorInfo';
 import {useStore} from 'vuex';
+import openMessage from '@/lib/openMessage';
 
 const store = useStore();
 const route = useRoute();
@@ -14,17 +15,16 @@ const svgIcon = getIconName;
 const type = ref(route.query.type || '-');
 const inputItem = ref<HTMLInputElement>();
 const selectedIcon = ref(svgIcon[0]);
-const toggle = (value: string) => {
-  selectedIcon.value = value;
-};
+const toggle = (value: string) => selectedIcon.value = value;
 const save = () => {
   const category = inputItem.value?.value;
-  if (category?.length === 0) return window.alert('类别名称不为空');
+  if (category?.length === 0) return openMessage({message: '类别名称不为空', type: 'error'});
   let obj = {category: category, iconName: selectedIcon.value, type: type.value};
   store.commit('createCategory', obj);
   const msg = store.state.createCategoryError;
-  window.alert(createCategoryError[msg]);
+  if (msg !== null) openMessage({message: createCategoryError[msg.message], type: 'error'});
   if (msg === null) {
+    openMessage({message: createCategoryError[msg], autoCloseDelay: 1});
     router.push({
       name: 'category',
       query: {
