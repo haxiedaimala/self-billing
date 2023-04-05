@@ -35,7 +35,7 @@ const categorySortList = computed(() => {
   let arr: RecordItem[] = [];
   let obj: { category: string, sum: number, items: RecordItem[] }[] = [];
   monthGroupList.value.forEach(group => {
-    Object.assign(arr, group.exItems, group.inItems);
+    arr = [...group.exItems, ...group.inItems];
   });
   arr = arr.filter(item => item.type === type.value);
   if (arr.length === 0) return [];
@@ -65,8 +65,8 @@ const dataListPie = computed(() => {
 const dataListLine = computed(() => {
   const newData: { key: string, value: number }[] = [];
   const list = type.value === '-' ? monthGroupList.value[0].exItems : monthGroupList.value[0].inItems;
-  const lastDay = dayjs().endOf('month').format('YYYY-MM-DD');
-  const daysInMonth = dayjs().daysInMonth();
+  const lastDay = dayjs(`${year.value}-${month.value}`).endOf('month').format('YYYY-MM-DD');
+  const daysInMonth = dayjs(`${year.value}-${month.value}`).daysInMonth();
   for (let i = 0; i < daysInMonth; i++) {
     const key = dayjs(lastDay).subtract(i, 'day').format('YYYY-MM-DD');
     const value = list.filter(item => dayjs(item.createAt).isSame(key, 'day'))[0]?.account || 0.00;
@@ -208,6 +208,8 @@ const maxAccountInfo = computed(() => {
 
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/helper.scss";
+
 .nav {
   display: flex;
   align-items: center;
@@ -226,8 +228,7 @@ const maxAccountInfo = computed(() => {
     white-space: nowrap;
 
     .year, .month {
-      padding: 0 4px;
-      color: var(--color-selected);
+      @extend %selectedItem;
     }
   }
 
@@ -250,6 +251,7 @@ const maxAccountInfo = computed(() => {
       color: var(--color-unselected);
 
       &.selected {
+        font-weight: bold;
         color: #333;
       }
 
@@ -332,7 +334,7 @@ const maxAccountInfo = computed(() => {
           padding: 0.4em;
           margin-right: 0.8em;
           border-radius: 50%;
-          border: 1px solid var(--color-border);
+          border: 1.5px solid var(--color-border);
           background-color: var(--color-category-bg);
 
           .icon {

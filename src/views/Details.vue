@@ -13,7 +13,7 @@ const store = useStore();
 const router = useRouter();
 const routeYear = route.query.year as string;
 const routeMonth = route.query.month as string;
-const year = ref(parseInt(routeYear)||dayjs().year());
+const year = ref(parseInt(routeYear) || dayjs().year());
 const month = ref(parseInt(routeMonth) || dayjs().month() + 1);
 const {toggleMonth, toggleYear, monthSum, monthExpend, monthIncome} = detailInput(year, month);
 const goBack = () => router.push({name: 'billing'});
@@ -89,6 +89,8 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
 </template>
 
 <style lang="scss" scoped>
+@import "~@/assets/styles/helper.scss";
+
 .nav {
   display: flex;
   align-items: center;
@@ -107,8 +109,7 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
     white-space: nowrap;
 
     .year, .month {
-      padding: 0 4px;
-      color: var(--color-selected);
+      @extend %selectedItem;
     }
   }
 
@@ -180,7 +181,7 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
           padding: 0.4em;
           border-radius: 50%;
           background-color: var(--color-category-bg);
-          border: 1px solid var(--color-border);
+          border: 1.5px solid var(--color-border);
           margin-right: 0.6em;
 
           .icon {

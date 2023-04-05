@@ -20,31 +20,33 @@ const toggleIsShow = (value: Category) => {
 <template>
   <TopNav to-page="money" v-model="type">目前共{{ isShowCategory.length }}个类别</TopNav>
 
-  <ul class="item item-first">
-    <li v-for="item in isShowCategory" :key="item.category">
+  <div class="item-wrapper">
+    <ul class="item">
+      <li v-for="item in isShowCategory" :key="item.category">
       <span class="category" @click="toggleIsShow(item)">
         <Icon :name="item.iconName"/>
         <Icon name="delete" class="delete"/>
       </span>
-      <span>{{ item.category }}</span>
-      <Icon name="menu" class="menu"/>
-    </li>
-  </ul>
+        <span>{{ item.category }}</span>
+        <Icon name="menu" class="menu"/>
+      </li>
+    </ul>
 
-  <template v-if="unShowCategory.length>0">
-    <div class="nav">
-      <span class="title">更多类别</span>
-    </div>
-    <ul class="item">
-      <li v-for="item in unShowCategory" :key="item.category" @click="toggleIsShow(item)">
+    <template v-if="unShowCategory.length>0">
+      <div class="nav">
+        <span class="title">更多类别</span>
+      </div>
+      <ul class="item">
+        <li v-for="item in unShowCategory" :key="item.category" @click="toggleIsShow(item)">
       <span class="category">
         <Icon :name="item.iconName"/>
         <Icon name="add" class="add"/>
       </span>
-        <span>{{ item.category }}</span>
-      </li>
-    </ul>
-  </template>
+          <span>{{ item.category }}</span>
+        </li>
+      </ul>
+    </template>
+  </div>
 
   <router-link :to="{name:'setCategory',query:{type:type}}" class="setCategory">
     <span>+ 自定义分类</span>
@@ -66,49 +68,50 @@ const toggleIsShow = (value: Category) => {
   }
 }
 
-.item {
-  li {
-    display: flex;
-    align-items: center;
-    padding: 0.8em 2em;
-    width: 100%;
+.item-wrapper {
+  padding-top: 100px;
+  margin-bottom: 5em;
 
-    .category {
-      border: 1px solid var(--color-border);
-      border-radius: 50%;
-      background-color: var(--color-category-bg);
-      width: 3em;
-      height: 3em;
+  .item {
+    li {
       display: flex;
-      justify-content: center;
       align-items: center;
-      margin-right: 1em;
-      position: relative;
+      padding: 0.8em 2em;
+      width: 100%;
 
-      .icon.add,
-      .icon.delete {
-        position: absolute;
-        width: 1.5em;
-        height: 1.5em;
-        top: 0;
-        right: 0;
-        transform: translate(40%, -50%);
+      .category {
+        border: 1.5px solid var(--color-border);
+        border-radius: 50%;
+        background-color: var(--color-category-bg);
+        width: 3em;
+        height: 3em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 1em;
+        position: relative;
+
+        .icon.add,
+        .icon.delete {
+          position: absolute;
+          width: 1.5em;
+          height: 1.5em;
+          top: 0;
+          right: 0;
+          transform: translate(40%, -50%);
+        }
+
+        .icon {
+          width: 2em;
+          height: 2em;
+        }
+
       }
 
-      .icon {
-        width: 2em;
-        height: 2em;
+      .menu {
+        margin-left: auto;
       }
-
     }
-
-    .menu {
-      margin-left: auto;
-    }
-  }
-
-  &.item-first {
-    margin-top: 90px;
   }
 }
 

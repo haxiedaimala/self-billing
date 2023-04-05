@@ -14,10 +14,6 @@ watchPostEffect(() => {
     tooltip: {
       trigger: 'item'
     },
-    legend: {
-      orient: 'vertical',
-      left: 'right'
-    },
     series: [
       {
         type: 'pie',

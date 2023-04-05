@@ -51,14 +51,24 @@ const toggle = (value: Category) => {
     .category-item {
       width: 56px;
       height: 56px;
+      border: 2px dotted var(--color-selected);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
       &.selected {
         border-color: var(--color-selected);
       }
 
       .icon {
-        width: 3em;
-        height: 3em;
+        flex-grow: 1;
+        flex-shrink: 0;
+        width: 2.2em;
+        height: 2.2em;
+      }
+
+      span {
+        font-size: 12px;
       }
     }
   }

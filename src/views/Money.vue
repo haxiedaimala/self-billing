@@ -2,7 +2,7 @@
 import Types from '@/components/Types.vue';
 import CategoryItem from '@/components/CategoryItem.vue';
 import NumberPanel from '@/components/NumberPanel.vue';
-import {computed, ref} from 'vue';
+import {computed, ref, watchPostEffect} from 'vue';
 import {useStore} from 'vuex';
 import {createRecordError} from '@/lib/storeErrorInfo';
 import openMessage from '@/lib/openMessage';
@@ -14,6 +14,9 @@ const dateSource = computed<Category[]>(() => {
   return categoryList.value.filter(item => item.isShow && item.type === type.value);
 });
 const selectCategory = ref<Category>(dateSource.value[0] || []);
+watchPostEffect(() => {
+  selectCategory.value = dateSource.value[0];
+});
 const note = ref('');
 const account = ref('0.00');
 const date = ref(new Date().toISOString());
@@ -28,7 +31,6 @@ const submitRecord = (value: { note: string, account: number, createAt: string }
 
 <template>
   <div class="wrapper">
-    {{ selectCategory }}
     <Types v-model="type"/>
     <CategoryItem :type="type" v-model="dateSource" v-model:selected="selectCategory"/>
     <NumberPanel :note="note" :account="account" :date="date" @submit="submitRecord"/>

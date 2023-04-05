@@ -22,7 +22,7 @@ export function detailInput(year: Ref<number>, month: Ref<number>) {
       if (text === '') return openMessage({message: '年份不能为空', type: 'error'});
       if (text === null) return;
       if (!/^\d{4}$/.test(text!)) return openMessage({message: '只能输入4个数字', type: 'error'});
-      month.value = parseInt(text!);
+      year.value = parseInt(text!);
     };
     openDialog({ok: ok, header: '请输入查询的年份：'});
   };
