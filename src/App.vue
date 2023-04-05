@@ -24,6 +24,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #333;
+  -webkit-tap-highlight-color: transparent;
 }
 
 </style>
