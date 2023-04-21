@@ -1,6 +1,9 @@
 const {defineConfig} = require('@vue/cli-service')
 const path = require('path')
 module.exports = defineConfig({
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/self-billing-website/'
+    : '/',
   transpileDependencies: true,
   lintOnSave: false,
 
