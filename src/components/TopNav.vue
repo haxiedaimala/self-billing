@@ -43,7 +43,12 @@ const toggle = (value: string) => emits('update:modelValue', value);
   display: flex;
   font-size: 18px;
   align-items: center;
-  padding: 0.8em 2em;
+  padding: 0.8em 2em 2em;
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
 
   .left {
     width: 1.5em;
@@ -54,7 +59,7 @@ const toggle = (value: string) => emits('update:modelValue', value);
 
   .title {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .type {
@@ -68,19 +73,6 @@ const toggle = (value: string) => emits('update:modelValue', value);
     .selected {
       font-weight: bold;
       color: #333;
-    }
-  }
-
-  &.top {
-    background-color: #fff;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    padding-top: 2em;
-
-    .title {
-      font-size: 24px;
     }
   }
 }

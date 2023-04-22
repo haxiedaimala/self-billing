@@ -38,11 +38,11 @@ const goBack = () => router.push({name: 'billing'});
   justify-content: center;
   flex-direction: row;
   font-size: 18px;
-  padding: 1.8em 0.8em;
 
   .left {
     width: 1.5em;
     height: 1.5em;
+    margin-left: 1em;
   }
 
   .type {
@@ -51,6 +51,7 @@ const goBack = () => router.push({name: 'billing'});
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    padding: 1.2em 0;
 
     li {
       width: 25%;

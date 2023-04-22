@@ -36,6 +36,7 @@ function onClose() {
 }
 
 #app {
+  height: 100vh;
   font-size: 16px;
   line-height: 1.5;
   font-family: $font-hei;

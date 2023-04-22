@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import Nav from '@/components/Nav.vue';
+import {onMounted, ref} from 'vue';
 
 defineProps<{
   routes: { name: string, text: string, iconName: string }[]
 }>();
+const layout = ref<HTMLDivElement>();
+onMounted(() => {
+  layout.value!.style.height = (document.documentElement.clientHeight || document.body.clientHeight) + 'px';
+});
 </script>
 
 <template>
-  <div class="layout-wrapper">
+  <div class="layout-wrapper" ref="layout">
     <div class="content">
       <slot/>
     </div>
@@ -19,7 +24,6 @@ defineProps<{
 .layout-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
 
   .content {
     flex: 1;

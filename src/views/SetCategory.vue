@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon from '@/components/Icon.vue';
 import TopNav from '@/components/TopNav.vue';
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import getIconName from '@/lib/getIconName';
 import {createCategoryError} from '@/lib/storeErrorInfo';
@@ -33,34 +33,46 @@ const save = () => {
     });
   }
 };
+
+const wrapper = ref<HTMLDivElement>();
+onMounted(() => {
+  wrapper.value!.style.height = (document.documentElement.clientHeight || document.body.clientHeight) + 'px';
+});
 </script>
 
 <template>
-  <TopNav v-model="type">设置自定义分类</TopNav>
-  <div class="content">
-    <span>新建分类名称</span>
-    <div class="edit">
-      <input type="text" placeholder="限5个汉字,不为空或重复..." maxlength="5" ref="inputItem">
-      <Icon name="pen"/>
-    </div>
-  </div>
-  <div class="nav">
-    <span class="title">更多类别</span>
-  </div>
-  <ul class="category">
-    <li v-for="item in svgIcon" :key="item">
-      <div class="category-item" :class="{selected:item===selectedIcon}" @click="toggle(item)">
-        <Icon :name="item"/>
+  <div class="wrapper" ref="wrapper">
+    <TopNav v-model="type">设置自定义分类</TopNav>
+    <div class="content">
+      <span>新建分类名称</span>
+      <div class="edit">
+        <input type="text" placeholder="限5个汉字,不为空或重复..." maxlength="5" ref="inputItem">
+        <Icon name="pen"/>
       </div>
-    </li>
-  </ul>
-  <router-link :to="{name:'setCategory'}" class="setCategory" @click="save">
-    <span>保存</span>
-  </router-link>
+    </div>
+    <div class="nav">
+      <span class="title">更多类别</span>
+    </div>
+    <ul class="category">
+      <li v-for="item in svgIcon" :key="item">
+        <div class="category-item" :class="{selected:item===selectedIcon}" @click="toggle(item)">
+          <Icon :name="item"/>
+        </div>
+      </li>
+    </ul>
+    <router-link :to="{name:'setCategory'}" class="setCategory" @click="save">
+      <span>保存</span>
+    </router-link>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 @import "~@/assets/styles/helper.scss";
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
 
 .nav {
   display: flex;
@@ -109,7 +121,7 @@ const save = () => {
 .category {
   @extend %category;
   padding: 0.5em 2em;
-  height: 260px;
+  flex: 1;
 
   li {
     width: 20%;
@@ -127,6 +139,9 @@ const save = () => {
 }
 
 .setCategory {
-  @extend %setCategory;
+  font-size: 20px;
+  padding: 0.8em 0;
+  text-align: center;
+  background-color: var(--color-bg);
 }
 </style>
