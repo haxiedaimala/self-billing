@@ -72,76 +72,73 @@ onMounted(() => {
 .wrapper {
   display: flex;
   flex-direction: column;
-}
 
-.nav {
-  display: flex;
-  font-size: 18px;
-  align-items: center;
-  padding: 0.8em 2em;
-
-  .title {
-    font-weight: bold;
-    font-size: 20px;
-  }
-}
-
-.content {
-  margin: 90px 2em 0.8em;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  padding: 1em;
-
-  span {
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  .edit {
-    margin-top: 0.5em;
+  .nav {
     display: flex;
+    font-size: 18px;
     align-items: center;
+    padding: 0.8em 2em;
 
-    input {
-      flex: 1;
-      border: none;
-      background-color: transparent;
-    }
-
-    .icon {
-      width: 2em;
-      height: 2em;
-      margin-left: auto;
+    .title {
+      font-weight: bold;
+      font-size: 20px;
     }
   }
-}
 
-.category {
-  @extend %category;
-  padding: 0.5em 2em;
-  flex: 1;
+  .content {
+    margin: 0.8em 2em;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
 
-  li {
-    width: 20%;
+    span {
+      font-weight: bold;
+      font-size: 18px;
+    }
 
-    .category-item {
-      width: 3em;
-      height: 3em;
-      background-color: var(--color-category-bg);
+    .edit {
+      margin-top: 0.5em;
+      display: flex;
+      align-items: center;
 
-      &.selected {
-        border-color: var(--color-selected);
+      input {
+        flex: 1;
+        border: none;
+        background-color: transparent;
+      }
+
+      .icon {
+        width: 2em;
+        height: 2em;
+        margin-left: auto;
       }
     }
   }
-}
 
-.setCategory {
-  font-size: 20px;
-  padding: 0.8em 0;
-  text-align: center;
-  background-color: var(--color-bg);
+  .category {
+    @extend %category;
+    padding: 0.5em 2em;
+    flex: 1;
+
+    li {
+      width: 20%;
+
+      .category-item {
+        width: 3em;
+        height: 3em;
+        background-color: var(--color-category-bg);
+
+        &.selected {
+          border-color: var(--color-selected);
+        }
+      }
+    }
+  }
+
+  .setCategory {
+    @extend %setCategory;
+  }
 }
 </style>

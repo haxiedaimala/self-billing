@@ -4,6 +4,7 @@ import {onMounted, ref} from 'vue';
 
 defineProps<{
   routes: { name: string, text: string, iconName: string }[]
+  isColumn?: boolean
 }>();
 const layout = ref<HTMLDivElement>();
 onMounted(() => {
@@ -13,7 +14,7 @@ onMounted(() => {
 
 <template>
   <div class="layout-wrapper" ref="layout">
-    <div class="content">
+    <div class="content" :class="{isColumn:isColumn}">
       <slot/>
     </div>
     <Nav :routes="routes"/>
@@ -28,6 +29,11 @@ onMounted(() => {
   .content {
     flex: 1;
     overflow: auto;
+
+    &.isColumn {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 </style>

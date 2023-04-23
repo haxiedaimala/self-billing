@@ -9,7 +9,7 @@ const routeInfos = reactive([
 </script>
 
 <template>
-  <Layout :routes="routeInfos">
+  <Layout :routes="routeInfos" :is-column="true">
     <router-view/>
   </Layout>
 </template>

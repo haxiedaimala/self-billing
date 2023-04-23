@@ -100,110 +100,110 @@ const maxAccountInfo = computed(() => {
 </script>
 
 <template>
-  <Teleport to="body">
-    <div class="nav">
-      <Icon name="left" @click="goBack"/>
-      <button>
-        <span class="year" @click="toggleYear">{{ year }}</span>年
-        <span class="month" @click="toggleMonth">{{ month }}</span>月的收支概况
-      </button>
-    </div>
-  </Teleport>
-  <template v-if="monthGroupList.length>0">
-    <DetailList class="list-top"
-                :top-title="`${year}年${month}月账本`"
-                type="月" :sum="monthSum"
-                :expend="monthExpend"
-                :income="monthIncome">
-      <ul class="detail-list">
-        <li :class="{selected:type==='-'}" @click="toggleType('-')">支出</li>
-        <li class="middle">/</li>
-        <li :class="{selected:type==='+'}" @click="toggleType('+')">收入</li>
-      </ul>
-    </DetailList>
-    <template v-if="accountSortList.length>0">
-      <div class="statistics">
-        <div class="item">
-          <div class="title">{{ typeTitle }}趋势概况</div>
-          <div class="chart-details">
-            <div>
-              <span class="chart-title">本月内单日最高{{ typeTitle }}</span>
-              <span>
+  <div class="nav">
+    <Icon name="left" @click="goBack"/>
+    <button>
+      <span class="year" @click="toggleYear">{{ year }}</span>年
+      <span class="month" @click="toggleMonth">{{ month }}</span>月的收支概况
+    </button>
+  </div>
+  <div class="statistics-content">
+    <template v-if="monthGroupList.length>0">
+      <DetailList class="list-top"
+                  :top-title="`${year}年${month}月账本`"
+                  type="月" :sum="monthSum"
+                  :expend="monthExpend"
+                  :income="monthIncome">
+        <ul class="detail-list">
+          <li :class="{selected:type==='-'}" @click="toggleType('-')">支出</li>
+          <li class="middle">/</li>
+          <li :class="{selected:type==='+'}" @click="toggleType('+')">收入</li>
+        </ul>
+      </DetailList>
+      <template v-if="accountSortList.length>0">
+        <div class="statistics">
+          <div class="item">
+            <div class="title">{{ typeTitle }}趋势概况</div>
+            <div class="chart-details">
+              <div>
+                <span class="chart-title">本月内单日最高{{ typeTitle }}</span>
+                <span>
                 在 <span class="chart-data">{{ maxAccountInfo.maxDate }}</span> 这一天中，你{{ typeTitle }}了
                 <span class="chart-data">￥{{ maxAccountInfo.maxAccount }}</span>
               </span>
-            </div>
-            <div class="chart-statistic">
-              <div>
-                <span class="chart-title">本月内平均每日{{ typeTitle }}</span>
-                <span>￥{{ maxAccountInfo.mean }}</span>
               </div>
-              <div>
-                <span class="chart-title">本月内累计支出笔数</span>
-                <span>{{ maxAccountInfo.length }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="chart-wrapper" ref="chartWrapper">
-            <ChartLine class="chart chart-line" :data="dataListLine"/>
-          </div>
-        </div>
-        <div class="item">
-          <div class="title">{{ typeTitle }}占比概况</div>
-          <ChartPie class="chart" :data="dataListPie"/>
-        </div>
-        <div class="item">
-          <div class="title">{{ typeTitle }}类目排行</div>
-          <div class="content">
-            <div class="content-item"
-                 v-for="group in categorySortList" :key="group.category">
-              <div class="iconItem">
-                <Icon :name="selectIcon(group.category)"/>
-              </div>
-              <div class="info">
-                <div class="info-item">
-                  <span class="category-title">{{ group.category }}</span>
-                  <span>共消费{{ group.items.length }}笔</span>
+              <div class="chart-statistic">
+                <div>
+                  <span class="chart-title">本月内平均每日{{ typeTitle }}</span>
+                  <span>￥{{ maxAccountInfo.mean }}</span>
                 </div>
-                <div class="info-item">
-                  本月共{{ typeTitle }}：￥{{ group.sum }}
+                <div>
+                  <span class="chart-title">本月内累计支出笔数</span>
+                  <span>{{ maxAccountInfo.length }}</span>
                 </div>
               </div>
             </div>
+            <div class="chart-wrapper" ref="chartWrapper">
+              <ChartLine class="chart chart-line" :data="dataListLine"/>
+            </div>
           </div>
-        </div>
-        <div class="item">
-          <div class="title">{{ typeTitle }}明细排行</div>
-          <div class="content">
-            <div class="content-item"
-                 v-for="item in accountSortList"
-                 :key="item.category"
-            >
-              <div class="iconItem">
-                <Icon :name="selectIcon(item.category)"/>
+          <div class="item">
+            <div class="title">{{ typeTitle }}占比概况</div>
+            <ChartPie class="chart" :data="dataListPie"/>
+          </div>
+          <div class="item">
+            <div class="title">{{ typeTitle }}类目排行</div>
+            <div class="content">
+              <div class="content-item"
+                   v-for="group in categorySortList" :key="group.category">
+                <div class="iconItem">
+                  <Icon :name="selectIcon(group.category)"/>
+                </div>
+                <div class="info">
+                  <div class="info-item">
+                    <span class="category-title">{{ group.category }}</span>
+                    <span>共消费{{ group.items.length }}笔</span>
+                  </div>
+                  <div class="info-item">
+                    本月共{{ typeTitle }}：￥{{ group.sum }}
+                  </div>
+                </div>
               </div>
-              <div class="info">
-                <div class="info-item">
-                  <span class="category-title">{{ item.category }}</span>
-                  <span class="detailAccount">
+            </div>
+          </div>
+          <div class="item">
+            <div class="title">{{ typeTitle }}明细排行</div>
+            <div class="content">
+              <div class="content-item"
+                   v-for="item in accountSortList"
+                   :key="item.category"
+              >
+                <div class="iconItem">
+                  <Icon :name="selectIcon(item.category)"/>
+                </div>
+                <div class="info">
+                  <div class="info-item">
+                    <span class="category-title">{{ item.category }}</span>
+                    <span class="detailAccount">
                   <span v-if="type==='-'">-</span>
                   ￥{{ item.account }}
                 </span>
+                  </div>
+                  <div class="info-item">{{ dayjs(item.createAt).format('MM.DD') }}</div>
                 </div>
-                <div class="info-item">{{ dayjs(item.createAt).format('MM.DD') }}</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
+      <template v-else>
+        <UnShow/>
+      </template>
     </template>
     <template v-else>
       <UnShow/>
     </template>
-  </template>
-  <template v-else>
-    <UnShow/>
-  </template>
+  </div>
 </template>
 
 
@@ -213,12 +213,8 @@ const maxAccountInfo = computed(() => {
 .nav {
   display: flex;
   align-items: center;
-  padding: 2em 0.8em 0.8em;
+  padding: 1.5em 0.8em;
   background-color: #fff;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
 
   button {
     font-size: 20px;
@@ -238,9 +234,12 @@ const maxAccountInfo = computed(() => {
   }
 }
 
-.list-top {
-  margin-top: 75px;
+.statistics-content {
+  flex: 1;
+  overflow-y: auto;
+}
 
+.list-top {
   .detail-list {
     display: flex;
     flex-direction: row;

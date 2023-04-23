@@ -36,54 +36,53 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
 </script>
 
 <template>
-  <Teleport to="body">
-    <div class="nav">
-      <Icon name="left" @click="goBack"/>
-      <button>
-        <span class="year" @click="toggleYear">{{ year }}</span>年
-        <span class="month" @click="toggleMonth">{{ month }}</span>月的账单
-      </button>
-    </div>
-  </Teleport>
-  <DetailList class="list-top"
-              :top-title="`${year}年${month}月账本`"
-              type="月" :sum="monthSum"
-              :expend="monthExpend"
-              :income="monthIncome"/>
-
-  <div class="details">
-    <div class="top">
-      <span class="title">收支记录</span>
-      <router-link :to="{name:'money'}" class="add">+ 新建</router-link>
-    </div>
-    <div class="content">
-      <template v-if="showDayList.length>0">
-        <div class="item" v-for="dayGroup in showDayList" :key="dayGroup.createAt">
-          <div class="title">
-            <span>{{ dayjs(dayGroup.createAt).format('MM.DD') }}</span>
-            <span>{{ dayjs(dayGroup.createAt).format('dddd') }}</span>
-            <span class="sum">总结：￥{{ dayGroup.sum }}</span>
-          </div>
-          <div class="detail" v-for="(item,index) in dayGroup.items" :key="index">
-            <div class="icon-wrapper">
-              <Icon :name="selectIcon(item.category)"/>
+  <div class="nav">
+    <Icon name="left" @click="goBack"/>
+    <button>
+      <span class="year" @click="toggleYear">{{ year }}</span>年
+      <span class="month" @click="toggleMonth">{{ month }}</span>月的账单
+    </button>
+  </div>
+  <div class="details-content">
+    <DetailList class="list-top"
+                :top-title="`${year}年${month}月账本`"
+                type="月" :sum="monthSum"
+                :expend="monthExpend"
+                :income="monthIncome"/>
+    <div class="details">
+      <div class="top">
+        <span class="title">收支记录</span>
+        <router-link :to="{name:'money'}" class="add">+ 新建</router-link>
+      </div>
+      <div class="content">
+        <template v-if="showDayList.length>0">
+          <div class="item" v-for="dayGroup in showDayList" :key="dayGroup.createAt">
+            <div class="title">
+              <span>{{ dayjs(dayGroup.createAt).format('MM.DD') }}</span>
+              <span>{{ dayjs(dayGroup.createAt).format('dddd') }}</span>
+              <span class="sum">总结：￥{{ dayGroup.sum }}</span>
             </div>
-            <div class="details-info">
-              <div class="category-sum">
-                <span>{{ item.category }}</span>
-                <span>
+            <div class="detail" v-for="(item,index) in dayGroup.items" :key="index">
+              <div class="icon-wrapper">
+                <Icon :name="selectIcon(item.category)"/>
+              </div>
+              <div class="details-info">
+                <div class="category-sum">
+                  <span>{{ item.category }}</span>
+                  <span>
                   <span v-if="item.type==='-'">-</span>
                   <span>￥{{ item.account }}</span>
                 </span>
+                </div>
+                <div class="note">{{ item.note }}</div>
               </div>
-              <div class="note">{{ item.note }}</div>
             </div>
           </div>
-        </div>
-      </template>
-      <template v-else>
-        <div class="no-show">暂无记录~~~</div>
-      </template>
+        </template>
+        <template v-else>
+          <div class="no-show">暂无记录~~~</div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -94,12 +93,8 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
 .nav {
   display: flex;
   align-items: center;
-  padding: 2em 0.8em 0.8em;
+  padding: 1.5em 0.8em;
   background-color: #fff;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
 
   button {
     font-size: 20px;
@@ -119,8 +114,9 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
   }
 }
 
-.list-top {
-  margin-top: 75px;
+.details-content {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .details {
@@ -142,6 +138,8 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
   }
 
   .content {
+    overflow-y: auto;
+
     .item {
       display: flex;
       flex-direction: column;
@@ -217,4 +215,5 @@ const selectIcon = (value: string) => categoryList.value.filter(item => item.cat
     }
   }
 }
+
 </style>

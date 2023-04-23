@@ -23,32 +23,26 @@ const toggle = (value: string) => emits('update:modelValue', value);
 </script>
 
 <template>
-  <Teleport to="body">
-    <div class="nav top">
-      <Icon name="left" class="left" @click="goBack"/>
-      <span class="title">
+  <div class="top-nav">
+    <Icon name="left" class="left" @click="goBack"/>
+    <span class="title">
         <slot/>
       </span>
-      <div class="type">
-        <span :class="{selected:modelValue==='-'}" @click="toggle('-')">支出</span>
-        <span>/</span>
-        <span :class="{selected:modelValue==='+'}" @click="toggle('+')">收入</span>
-      </div>
+    <div class="type">
+      <span :class="{selected:modelValue==='-'}" @click="toggle('-')">支出</span>
+      <span>/</span>
+      <span :class="{selected:modelValue==='+'}" @click="toggle('+')">收入</span>
     </div>
-  </Teleport>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.nav {
+.top-nav {
   display: flex;
   font-size: 18px;
   align-items: center;
-  padding: 0.8em 2em 2em;
+  padding: 1em 2em;
   background-color: #fff;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
 
   .left {
     width: 1.5em;
